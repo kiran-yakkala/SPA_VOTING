@@ -1,0 +1,1390 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+
+:root {
+  --primary-color: #4CAF50;
+  --secondary-color: #f44336;
+  --background-color: #f5f5f5;
+  --text-color: #333;
+
+  --color-primary: rgb(15,89,193);
+  --color-primary-variant: rgb(11,175, 207);
+  --color-gray-0: #fff;
+  --color-gray-100:#eee;
+  --color-gray-200:#ccc;
+  --color-gray-300:#bbb;
+  --color-gray-400: #999;
+  --color-gray-500: #777;
+  --color-gray-600: #555;
+  --color-gray-700: #333;
+  --color-gray-800: #111;
+  --color-gray-900: #000;
+  --color-danger: rgb(246, 67, 67);
+  --color-success: rgb(6, 164, 101);
+
+  --radius-1: 4px;
+  --radius-2: 8px;
+  --radius-3: 12px;
+  --radius-4: 16px;
+  --radius-5: 20px;
+
+  --container-w-lg: 80%;
+  --container-w-sm: 94%;
+
+  --transition: all 0.3s ease;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box; 
+  list-style: none  ;
+  text-decoration: none;
+  border: 0;
+}
+
+.dark {
+  --color-primary: rgb(15,89,193);
+  --color-primary-variant: rgb(11,175, 207);
+  --color-gray-900: #fff;
+  --color-gray-800:#eee;
+  --color-gray-700:#ccc;
+  --color-gray-600:#bbb;
+  --color-gray-500: #999;
+  --color-gray-400: #777;
+  --color-gray-300: #555;
+  --color-gray-200: #333;
+  --color-gray-100: #111;
+  --color-gray-0: #000;
+
+
+} 
+
+
+body {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.9rem ;
+  background: var(--color-gray-100);
+  color: var(--color-gray-700);
+  line-height: 1.6;
+}
+
+.container {
+  width: var(--container-w-lg);
+  margin-inline:  auto;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  line-height: 1.1;
+  color: var(--color-gray-900);
+  text-transform: uppercase;
+  font-weight: 800;
+  margin-bottom: 1rem;
+}
+
+h1{
+  font-size: 1.6rem;
+}
+
+h2{
+  font-size: 1.3rem;
+}
+
+h3{
+  font-size: 1.1rem;
+}
+
+h4{
+  font-size: 0.9rem;
+}
+
+h5{
+  font-size: 0.75rem;
+}
+
+h6{
+  font-size: 0.6em;
+}
+
+a {
+  font-size: 0.8em;
+}
+
+img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+button {
+  cursor: pointer;
+}
+
+.btn {
+  width: fit-content;
+  background: var(--color-gray-100);
+  color: var(--color-gray-900);
+  font-weight: 600;
+  padding: 1rem 2rem;
+  text-align: center;
+  border-radius: var(--radius-1);
+  transition: var(--transition);
+}
+
+.btn.primary {
+  background: var(--color-primary);
+  color: white;
+} 
+
+.btn.danger {
+  background: var(--color-danger);
+  color: white;
+}
+
+.btn.sm {
+  padding: 0.5rem 1.2rem;
+  font-size: 0.8rem;
+}
+
+.btn.full {
+  width: 100%;
+}
+
+.btn:hover {
+  background: var(--color-gray-900);
+  color: var(--color-gray-0);
+  opacity: 0.9;
+}
+
+
+
+
+/* Error page */
+.errorPage {
+  display: grid;
+  place-items: center;
+  height: 100vh;
+  width: 100vh;
+  background: var(--color-gray-0);
+}
+
+.errorPage__container {
+  width: 30rem;
+  text-align: center;
+}
+
+.errorPage__container h1 {
+  font-size: 4rem;
+}
+
+
+
+/* navbar */
+nav {
+  background: var(--color-primary);
+  display: grid;
+  place-items: center;
+  height: 3rem;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  z-index: 1;
+}
+
+
+
+.nav__container * {
+  color: white
+}
+ 
+.nav__container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.nav__container div{
+  display: flex;
+  align-items: center;
+  gap: 4rem;
+}
+
+.nav__logo {
+  font-size: 1.2 rem;
+  font-weight: 700;
+}
+
+.nav__toggle-btn {
+  font-size: 1.8 rem;
+  background: transparent;
+  display: none;
+}
+
+.nav__container a {
+  transition: var(--transition);
+}
+
+.nav__container a:hover {
+  color: var(--color-primary-variant);
+}
+
+.nav__container menu {
+  display: flex;
+  align-items: center;
+  gap: 4rem;
+}
+
+.theme__toggle-btn {
+  font-size: 1.5 rem;
+  background: transparent;
+  display: flex;
+  transition: var(--transition);
+}
+
+.theme__toggle-btn:hover {
+  opacity: 0.75;
+}
+
+
+
+
+/* register */
+.register {
+  display: grid;
+  place-items: center;
+  height: 100vh;
+}
+
+.register__container {
+  width: 35rem;
+  background: var(--color-gray-0);
+  padding: 3rem;
+  border-radius: var(--radius-5);
+  box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.1);
+}
+
+.register__container H2 {
+  margin-bottom: 2rem;
+  color:var(--color-primary);
+}
+
+.register form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.register form input {
+  padding: 0.7rem;
+  background: var(--color-gray-100);
+  color:var(--color-gray-900);
+  border-radius: var(--radius-1);
+  transition: var(--transition);
+}
+
+.register form p > a {
+  color: var(--color-primary);
+  font-weight: 500;
+}
+
+.form__error-message {
+  color: var(--color-gray-0);
+  background: var(--color-danger);
+  padding: 0.6rem 1.5rem;
+  border-radius: var(--radius-1);
+} 
+
+
+/*Results page */
+.results {
+  width: 58rem;
+  margin-inline: auto;
+  margin: 5rem 0;
+}
+
+.results__container {
+  display: flex;
+  flex-direction: column;
+}
+
+.result {
+  background: var(--color-gray-0);
+  border-radius: var(--radius-4);
+  margin-bottom: 1.5rem;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.result__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between; 
+  background: var(--color-gray-100);
+  border: 0.5rem solid var(--color-gray-0);
+  border-radius: 1.5rem 1.5rem 0 0;
+}
+
+.result.closed{
+  background: var(--color-gray-200);
+  border-radius: var(--radius-4);
+  margin-bottom: 1.5rem;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.result__header.closed {
+  display: flex;
+  align-items: center;
+  justify-content: space-between; 
+  background: #496c4b;
+  border: 0.5rem solid var(--color-gray-0);
+  border-radius: 1.5rem 1.5rem 0 0;
+}
+
+.result__header-image {
+  width: 3rem;
+  aspect-ratio: 1/1;
+  overflow: hidden;
+  border-radius: 50%;
+  margin: 1.5rem
+}
+
+.result__header h4 {
+  padding: 1.5rem
+}
+
+.result__list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5 rem;
+  padding: 2 rem;
+  padding-top: 1rem;
+}
+
+.result__candidate {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+
+.result__candidate-image {
+  height: 3.5rem;
+  aspect-ratio: 1/1;
+  overflow: hidden;
+  border-radius: 1rem;
+}
+
+.result__candidate-info {
+  width: 100%
+}
+
+.result__candidate-rating {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.result__candidate-loader {
+  display: block;
+  width: 100%;
+  height: 0.4rem;
+  background: var(--color-gray-100);
+  margin-top: 0.5rem;
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+
+.result__candidate-loader span {
+  display: block;
+  height: 100%;
+  background: linear-gradient(90deg, var(--color-primary), var(--color-primary-variant));
+}
+
+/* 1. Highlight the Winning Row */
+.result__candidate.is-winner {
+  background: rgba(255, 215, 0, 0.05); /* Very subtle gold background */
+  border: 1px solid #ffd700;
+  border-radius: 1rem;
+  padding: 0.5rem;
+  position: relative;
+  box-shadow: 0 0 10px rgba(255, 215, 0, 0.2);
+}
+
+/* 2. Winner Image Border */
+.result__candidate.is-winner .result__candidate-image {
+  border: 2px solid #ffd700;
+  box-shadow: 0 0 8px #ffd700;
+}
+
+/* 3. Gold Progress Bar for Winner */
+.result__candidate.is-winner .result__candidate-loader span {
+  background: linear-gradient(90deg, #bf953f, #fcf6ba, #b38728);
+  box-shadow: 0 0 5px rgba(179, 135, 40, 0.5);
+}
+
+/* 4. Floating Trophy Icon */
+.winner-trophy {
+  font-size: 1.2rem;
+  margin-right: 0.5rem;
+  filter: drop-shadow(0 0 3px #ffd700);
+  animation: trophy-bounce 2s infinite ease-in-out;
+}
+
+@keyframes trophy-bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-3px); }
+}
+
+/* 5. Winner Text Badge */
+.winner-label {
+  color: #b38728;
+  font-weight: 700;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+
+
+/*Candidate page */
+.candidates {
+  margin: 5rem 0;
+}
+
+.candidates__header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 60%;
+  margin-inline: auto;
+}
+
+.candidates__header p {
+  margin-bottom: 3rem;
+}
+
+.candidates__header p .btn.primary {
+  justify-content: center;
+}
+
+.candidates__container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+  gap: 3rem;
+} 
+
+.candidate {
+  background: var(--color-gray-0);
+  text-align: center;
+  border-radius: var(--radius-3);
+  padding-bottom: 1.2rem;
+  overflow: hidden;
+  box-shadow: 0 0.5rem 0.5rem rgba(0,0,0,0.1);
+  border: 0.5rem solid var(--color-gray-0);
+  transition: var(--transition);
+}
+
+.candidate:hover {
+  border-color: var(--color-gray-100);
+  box-shadow: none;
+}
+
+.candidate__image {
+  width: 100%;
+  aspect-ratio: 1/1;
+  overflow: hidden;
+  margin-inline: auto;
+  margin-bottom: 1.5rem;
+}
+
+.candidate small {
+  display: block;
+  color: var(--color-gray-500);
+  margin: 0.5rem 0 1 rem;
+}
+
+
+/* modal */
+.modal{
+  backdrop-filter: blur(5px);
+  position: fixed;
+  top:0;
+  left:0;
+  z-index: 2;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.7);
+  display: grid;
+  place-items: center;
+}
+  
+
+.modal__content {
+  background: var(--color-gray-0);
+  width: 35rem;
+  border-radius: var(--radius-5);
+  overflow: hidden;
+}
+
+.modal__header {
+  background: var(--color-primary);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 2rem;
+} 
+
+.modal h4 {
+  color: white;
+}
+
+.modal__header button {
+  font-size: 1.8 rem;
+  background: transparent;
+  color: white;
+} 
+
+.modal__content form {
+  margin-top: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding: 2rem;
+  padding-bottom: 3rem;
+}
+
+.modal__content form input {
+  margin-top: 2rem;
+  width:100%;
+  padding: 0.8rem 1rem;
+  background: var(--color-gray-100);
+  color:var(--color-gray-900);
+  border-radius: var(--radius-1);
+} 
+
+.modal__selection {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem; /* Space between "Select Candidate:" and the dropdown */
+}
+
+
+.modal__selection {
+  margin-top: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem; /* Gap between "Select Candidate" and the dropdown */
+}
+
+.modal__selection label h6 {
+  margin: 0;
+  color: var(--color-gray-700);
+}
+
+
+.winner-dropdown {
+  width: 100%;
+  padding: 0.8rem 1rem;
+  background: var(--color-gray-100);
+  color: var(--color-gray-900);
+  border: 1px solid var(--color-gray-300); /* Adds definition */
+  border-radius: var(--radius-1);
+  font-size: 0.9rem;
+  outline: none;
+  transition: border-color 0.3s ease;
+}
+
+.winner-dropdown:focus {
+  border-color: var(--color-primary); /* Highlights when clicked */
+}
+
+.modal__content-body {
+  padding: 2rem;
+  padding-bottom: 3rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.modal__info h6 {
+  margin-bottom: 0.5rem;
+  color: var(--color-gray-700);
+}
+
+.modal__submit-btn {
+  width: 100%; /* Makes button full width of the modal body */
+  margin-top: 1rem;
+  padding: 0.8rem;
+  cursor: pointer;
+}
+
+.modal__info-item {
+  display: flex;
+  gap: 0.8rem;      /* Creates the horizontal gap between label and value */
+  margin-bottom: 1rem; /* Creates vertical gap between rows */
+  align-items: baseline;
+}
+
+/* Style for the Labels (Title:, Description:, etc.) */
+.modal__label, 
+.modal__label h6 {
+  font-weight: 700;       /* Makes it Bold */
+  color: var(--color-gray-900);
+  margin: 0;              /* Removes default header margins */
+  white-space: nowrap;    /* Prevents label from wrapping */
+}
+
+/* Style for the actual Values (the data) */
+.modal__value {
+  color: var(--color-gray-500); /* Lighter color to contrast with label */
+  font-size: 0.95rem;
+  line-height: 1.4;
+}
+
+
+
+
+
+
+/* COnfirm vote page */
+
+.confirm__vote-content {
+  text-align: center;
+  border-radius: var(--radius-3);
+}
+
+.dark .confirm__vote-content {
+  /* background: var(--color-gray-800);
+  color: var(--color-gray-100); */
+  background: #211f2e;
+}
+
+.confirm__vote-content h5 {
+  margin: 2rem 0;
+  color: var(--color-primary) ;
+}
+
+.confirm__vote-image {
+  width: 15rem;
+  aspect-ratio: 1/1;
+  overflow: hidden;
+  border-radius: var(--radius-3);
+  margin-inline: auto;
+  margin-bottom: 2rem;
+} 
+
+.confirm__vote-content p {
+  margin: 0.4rem 0 2.5rem;
+  padding: 0 2rem;
+} 
+
+.confirm__vote-cta {
+  width: fit-content;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  margin-inline: auto;
+  margin-bottom: 2rem;  
+} 
+
+.dark .confirm__vote-cta .btn {
+  color: white;
+}
+
+
+
+/* congrats page */
+.congrats {
+  padding: 8rem 0;
+  text-align: center;
+  height: 100vh;
+}
+
+.confirm p {
+  margin: 0.5rem 0 1.2rem;
+}
+
+
+
+/* elections  */
+.elections {
+  margin: 5rem 0;
+} 
+
+.elections__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom:  1rem;
+  padding: 0.5rem;
+}
+
+.elections__menu {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.elections-card__menu {
+    display: flex;
+    gap: 2rem;
+    overflow-x: auto;
+    padding: 1rem 0;
+    cursor: grab; /* Shows the open hand icon */
+    user-select: none; /* Prevents text highlighting while dragging */
+    scrollbar-width: none; /* Keep scrollbar hidden */
+    -ms-overflow-style: none;
+}
+
+/* Hide scrollbar for Chrome/Safari */
+ .elections__menu::-webkit-scrollbar {
+  display: none;
+    /* height: 8px; Height of the horizontal scrollbar */
+  /* display: block; Ensures it shows up */
+} 
+
+.elections__menu.active {
+    cursor: grabbing; /* Shows the closed hand icon */
+    scroll-behavior: auto; /* Disables smooth scroll for better performance while dragging */
+}
+
+.election {
+    min-width: 320px;
+    flex-shrink: 0;
+    pointer-events: none; /* Prevents card links from firing accidentally during drag */
+}
+
+/* Re-enable pointer events for specific buttons inside the card if needed */
+.election__cta a, .election__cta button {
+    pointer-events: auto;
+}
+
+.elections__menu::-webkit-scrollbar-track {
+  background: var(--color-gray-100); /* The "path" of the scrollbar */
+  border-radius: 10px;
+}
+
+.elections__menu::-webkit-scrollbar-thumb {
+  background: var(--color-primary); /* The draggable part */
+  border-radius: 10px;
+}
+
+.elections__menu::-webkit-scrollbar-thumb:hover {
+  background: var(--color-primary-variant); /* Darkens on hover */
+}
+
+.election {
+  background: var(--color-gray-0);
+  border-radius: var(--radius-3);
+  overflow: hidden;
+  border: 0.5rem solid var(--color-gray-0);
+  transition: var(--transition);
+  display: grid;
+  grid-template-columns: 17rem auto;
+  align-items: center;
+}
+
+.election__winner-box {
+    background: var(--color-gray-100);
+    padding: 1rem;
+    border-radius: var(--radius-2);
+    border-left: 4px solid #ffd700; /* Gold Border */
+    margin: 1rem 0;
+    text-align: center;
+}
+
+.winner-label {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    color: var(--color-gray-500);
+    display: block;
+    margin-bottom: 0.2rem;
+}
+
+.winner-name {
+    color: var(--color-primary);
+    font-weight: 700;
+    font-size: 1.1rem;
+}
+
+/* Badge on the image */
+.winner-tag {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    background: #000;
+    color: #fff;
+    padding: 0.3rem 0.8rem;
+    font-size: 0.7rem;
+    border-radius: var(--radius-1);
+    font-weight: bold;
+}
+
+/* Dim the card if it's closed */
+.election--closed {
+    opacity: 0.9;
+}
+
+.election--closed .election__image img {
+    filter: grayscale(30%);
+}
+
+/* .election {
+  min-width: 320px;        
+  flex-shrink: 0;          
+  scroll-snap-align: start; 
+  background: var(--color-gray-0);
+  border-radius: var(--radius-5);
+  box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+} */
+
+/* Ensure the image stays a consistent size in the card */
+.election__image img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+}
+
+/* .election__image {
+  max-height: 13rem;
+} */
+
+.election_hover {
+  box-shadow: 0 0.8rem 0.8rem rgba(0,0,0,0.1);
+} 
+
+.election__info {
+  padding: 1rem 2rem;
+} 
+
+.election__info h4 {
+  margin-bottom: 0.7rem;
+  color:var(--color-primary)
+}
+
+.election__cta {
+  display: flex;
+  gap: 1.2rem;
+  margin-top: 1rem;
+}
+
+/* Container for the side-by-side layout */
+.form__group-row {
+    display: flex;
+    gap: 1.5rem; /* Space between the date and the select */
+    width: 100%;
+}
+
+/* Ensure individual groups take up equal space */
+.form__group {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+/* Make sure inputs and selects fill their container */
+.form__group input,
+.form__group select {
+    width: 100%;
+    padding: 0.8rem;
+    border-radius: var(--radius-1);
+    background: var(--color-gray-100);
+    border: 1px solid var(--color-gray-200);
+}
+
+/* Highlight the container */
+.election--highlight {
+    border: 2px solid var(--color-primary);
+    transform: scale(1.02); /* Slightly larger */
+    box-shadow: 0 10px 30px rgba(var(--color-primary-rgb), 0.2);
+    position: relative;
+}
+
+/* The badge styling */
+.next-match-badge {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    background: var(--color-primary); /* Your theme's primary color */
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: var(--radius-1);
+    font-size: 0.75rem;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+    z-index: 10;
+    border: 1px solid rgba(205, 60, 60, 0.852);
+}
+
+/* The Glow and Pulse Animation */
+.glow-animation {
+    box-shadow: 0 0 15px var(--color-primary);
+    animation: pulse-glow 2s infinite;
+}
+
+@keyframes pulse-glow {
+    0% {
+        box-shadow: 0 0 5px var(--color-primary);
+        transform: scale(1);
+    }
+    50% {
+        box-shadow: 0 0 20px var(--color-primary), 0 0 30px var(--color-primary-variant);
+        transform: scale(1.05); /* Slight pop out */
+    }
+    100% {
+        box-shadow: 0 0 5px var(--color-primary);
+        transform: scale(1);
+    }
+}
+
+/* Optional: Highlight the card border too */
+.election--next {
+    border: 2px solid var(--color-primary);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+}
+
+/* Ensure the image container is relative for absolute positioning */
+.election__image {
+    position: relative;
+    overflow: hidden;
+}
+
+/* election details page */
+.electionDetails {
+  margin: 5rem 0;
+}
+
+.electionDetails__image {
+  height: 15rem;
+  margin: 1.2rem 0 0.8rem;
+}
+
+.electionDetails__candidates{
+  margin-top: 2.5rem;
+  padding-top: 2.5rem;
+  display:grid;
+  grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+  gap: 3rem;
+  border-top: 2px solid var(--color-gray-200);
+}
+
+.electionCandidate {
+  background: var(--color-gray-0);
+  border-radius: var(--radius-4);
+  overflow: hidden;
+  position: relative;
+  text-align: center;
+}
+
+.electionCandidate__image {
+  height: 15rem;
+  overflow: hidden;
+}
+
+.electionCandidate h5 {
+  margin: 0.7rem 0 0.3rem;
+}
+
+.electionCandidate > div:nth-child(2) {
+  padding: 1.2rem;
+}
+
+.electionCandidate__btn {
+  position: absolute;
+  right: 0;
+  top : 0;
+  margin: 1rem;
+  background: var(--color-danger);
+  color: var(--color-gray-0);
+  padding: 0.5rem;
+  font-size: 1.1rem;
+  border-radius: 0.6rem;
+  display: flex;
+}
+
+.electionCandidate__btn:hover {
+  background: var(--color-gray-900);
+}
+
+/* 1. The Gold Glow for the Card */
+.electionCandidate.winner-card {
+  border: 3px solid #ffd700;
+  box-shadow: 0 0 15px rgba(255, 215, 0, 0.4);
+  transform: scale(1.02); /* Makes the winner stand out slightly */
+  transition: all 0.3s ease;
+}
+
+/* 2. The Floating Trophy/Badge */
+.winner-badge {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background: linear-gradient(45deg, #bf953f, #fcf6ba, #b38728, #fbf5b7, #aa771c);
+  color: #000;
+  padding: 0.5rem 1rem;
+  font-weight: bold;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  border-bottom-right-radius: var(--radius-4);
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  box-shadow: 2px 2px 5px rgba(0,0,0,0.2);
+}
+
+/* 3. Confetti Effect (Optional - slow pulse) */
+@keyframes winner-glow {
+  0% { filter: drop-shadow(0 0 2px #ffd700); }
+  50% { filter: drop-shadow(0 0 8px #ffd700); }
+  100% { filter: drop-shadow(0 0 2px #ffd700); }
+}
+
+.winner-icon {
+  animation: winner-glow 2s infinite;
+}
+
+.add__candidate-btn{
+  background: var(--color-gray-100);
+  border: 2px solid var(--color-primary);
+  border-radius: var(--radius-4);
+  font-size: 5rem;
+  color: var(--color-primary);
+  box-shadow: 0 0.8rem 0.8rem rgba(0, 0, 0, 0.1);
+  transition: var(--transition);
+  display: grid;
+  place-items: center;
+  min-height: 15rem;
+}
+
+.winner-display-row {
+    display: flex;
+    align-items: center;    /* Keeps them vertically centered */
+    justify-content: center; /* Centers the whole group in the card */
+    gap: 0.5rem;            /* Space between "Winner:" and the Name */
+}
+
+/* Remove default margins from h5 that might push it to a new line */
+.winner-name {
+    margin: 0;
+    color: var(--color-primary);
+    font-weight: 700;
+    font-size: 1.1rem;
+}
+
+.winner-label {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--color-gray-500);
+    white-space: nowrap; /* Prevents "Winner:" from wrapping */
+}
+
+
+
+.voters {
+  margin: 6rem 0 3rem;
+}
+
+.voters h2 {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.voters__table {
+  width: 100%;
+}
+
+.voters__table thead th {
+   text-align: left;
+   padding: 0.7rem 1.5rem;
+
+}
+
+.voters__table thead td {
+  padding: 0.7rem 1.5rem;
+}
+
+.voters__table tbody tr:nth-child(odd) {
+  background: var(--color-gray-0);
+}
+
+
+.voters__table tbody td {
+   text-align: left;
+}
+
+/* --- THE WINNING VOTE ROW --- */
+tr.row-won {
+  background: #fffdf0; /* Very light gold background */
+  border-left: 4px solid #ffd700; /* Gold stripe on the left */
+}
+
+tr.row-won h5 {
+  color: #b38728; /* Gold-tinted text */
+}
+
+/* --- THE LOSING VOTE ROW --- */
+tr.row-lost {
+  background: var(--color-gray-100);
+  opacity: 0.8;
+}
+
+tr.row-lost td {
+  color: var(--color-gray-500);
+}
+
+/* --- BADGE STYLES --- */
+.status-badge {
+  padding: 0.3rem 0.6rem;
+  border-radius: 0.4rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.badge-win {
+  background: #ffd700;
+  color: #000;
+}
+
+.badge-loss {
+  background: var(--color-gray-300);
+  color: var(--color-gray-700);
+}
+
+.status-badge.neutral {
+    background: var(--color-gray-200);
+    color: var(--color-gray-800);
+    border: 1px dashed var(--color-gray-300);
+    font-weight: 400;
+}
+
+
+/*Profile*/
+
+.profile {
+    margin-top: 5rem;
+    margin-bottom: 5rem;
+}
+
+.profile__header {
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+.profile__card {
+    background: var(--color-gray-0);
+    padding: 3rem;
+    border-radius: var(--radius-5);
+    box-shadow: 0 1.5rem 3rem rgba(0, 0, 0, 0.1);
+    max-width: 50rem;
+    margin: 0 auto;
+}
+
+.profile__details {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.profile__item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--color-gray-100);
+}
+
+.profile__label {
+    font-weight: 700;
+    color: var(--color-gray-900);
+}
+
+.profile__value {
+    color: var(--color-gray-700);
+}
+
+/* Badge for Admin/Voter status */
+.profile__badge {
+    padding: 0.4rem 1rem;
+    border-radius: var(--radius-1);
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.profile__badge.admin {
+    background: var(--color-primary);
+    color: white;
+}
+
+.profile__badge.voter {
+    background: var(--color-gray-200);
+    color: var(--color-gray-900);
+}
+
+.profile__divider {
+    border: 0;
+    border-top: 1px solid var(--color-gray-200);
+    margin: 2rem 0;
+}
+
+.profile__history-header {
+    margin-bottom: 1.5rem;
+}
+
+/* Styling for the status text in the table */
+.vote-status {
+  font-weight: 800;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  margin-right: 5px;
+}
+
+.status-won {
+  color: #2f855a; /* Green */
+  background-color: #f0fff4;
+}
+
+.status-lost {
+  color: #c53030; /* Red */
+  background-color: #fff5f5;
+}
+
+.status-pending {
+   background: var(--color-gray-200);
+    color: var(--color-gray-800);
+    border: 1px dashed var(--color-gray-300);
+    font-weight: 400;
+}
+
+.btn-results {
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  transition: opacity 0.3s;
+}
+
+.btn-results:hover {
+  opacity: 0.8;
+}
+
+.view-results-text {
+  color: var(--color-gray-500);
+  font-size: 0.85rem;
+}
+
+
+
+/* Loader */
+.loader {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+  padding-top: 8rem;
+}
+
+.loader__container {
+  width: 7rem;
+  height: 7rem;
+}
+
+
+
+
+@media screen and (max-width: 600px) {
+
+  .container{
+    width: var(--container-w-sm);
+  }
+
+  nav {
+    height: 4 rem;
+  }
+
+  .nav__container div{
+     gap: 3rem;
+  }
+
+  .nav__toggle-btn {
+  display: inline-block;
+}
+
+  .nav__container menu {
+    position: fixed;
+    top: 4rem;
+    right: 0;
+    width: 12rem;
+    gap: 0;
+    flex-direction: column;
+  }
+
+  .nav__container menu a {
+    background: var(--color-gray-0);
+    color: var(--color-gray-900);
+    border-bottom: 1px solid var(--color-gray-200);
+    width: 100%;
+    display: grid;
+    place-items: center;
+    height: 4rem;
+    box-shadow: -2rem 4rem 2rem rgba(0, 0, 0, 0.1);
+  }
+
+  .errorPage__container {
+    width: 100%;
+  } 
+
+  .register__container {
+    width: 100%;
+  }
+
+  .results {
+    width: var(--container-w-sm)
+  }
+
+  .candidates__header {
+    width: var(--container-w-sm)
+  } 
+
+  .modal__content {
+    width: var(--container-w-sm)
+  }
+
+  .election {
+    grid-template-columns: 1fr;
+  }
+
+  .election__info {
+    padding: 2rem 1rem;
+  }
+
+  .election__image {
+    height: 100%;
+  }
+
+    .voters__table thead tr {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .voters__table tbody tr {
+    display: flex;
+    flex-direction: column;
+    width:100%;
+  }
+
+}
+
+
+
+
+
