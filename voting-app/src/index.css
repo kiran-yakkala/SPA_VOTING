@@ -1123,7 +1123,7 @@ nav {
 
 /* --- THE WINNING VOTE ROW --- */
 tr.row-won {
-  background: #fffdf0; /* Very light gold background */
+
   border-left: 4px solid #ffd700; /* Gold stripe on the left */
 }
 
