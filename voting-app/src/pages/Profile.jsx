@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
+import {getOrdinalDateTime} from '../components/util'
 
 const Profile = () => {
 
@@ -73,7 +74,7 @@ const Profile = () => {
                                     <tr key={vote.id} className={vote.election.winner ? 'row-won' : 'row-lost'}>
                                         <td>{vote.election.title}</td>
                                         <td>{vote.candidate.fullName}</td>
-                                        <td>{new Date(vote.createdAt).toLocaleString()}</td>
+                                        <td>{getOrdinalDateTime(vote.createdAt)}</td>
                                         <td>
                                             <Link to={`/elections/${vote.election._id}`} className="btn-results">
                                                 {vote.election.winner ? (

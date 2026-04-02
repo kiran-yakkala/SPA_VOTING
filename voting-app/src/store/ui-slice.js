@@ -5,7 +5,9 @@ const initialState = {
   voteCandidateModalShowing: false,
   electionModalShowing: false,
   updateElectionModalShowing: false,
-  closeElectionModalShowing:false
+  closeElectionModalShowing:false,
+  teamModalShowing: false,
+  updateTeamModalShowing: false
 };
 
 const uiSlice = createSlice({
@@ -41,6 +43,18 @@ const uiSlice = createSlice({
     },
     closeElectionCloseModal(state) {
       state.closeElectionModalShowing = false;
+    },
+    openTeamModal(state) {
+      state.teamModalShowing = true;
+    },
+    closeTeamModal(state) {
+      state.teamModalShowing = false;
+    },
+    openUpdateTeamModal(state) {
+      state.updateTeamModalShowing = true;
+    },
+    closeUpdateTeamModal(state) {
+      state.updateTeamModalShowing = false;
     },
   }
 });

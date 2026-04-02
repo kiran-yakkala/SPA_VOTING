@@ -7,7 +7,8 @@ const initialState = {
   currentVoter,
   selectedElection: "",
   idOfElectionToUpdate: "",
-  addCandidateElectionId: ""
+  addCandidateElectionId: "",
+  idOfTeamToUpdate: ""
 };
 
 const voteSlice = createSlice({
@@ -28,6 +29,9 @@ const voteSlice = createSlice({
     },
     changeAddCandidateElectionId: (state, action) => {
       state.addCandidateElectionId = action.payload;
+    },
+    changeIdOfTeamToUpdate: (state, action) => {
+      state.idOfTeamToUpdate = action.payload;
     },
   },
 });

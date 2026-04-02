@@ -8,6 +8,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import AddCandidateModal from '../components/AddCandidateModal';
 import axios from 'axios';
 import { GiCrossMark } from "react-icons/gi";
+import {getOrdinalDateTime} from '../components/util'
 
 const ElectionDetails = () => {
   
@@ -171,7 +172,7 @@ const ElectionDetails = () => {
                 <tr key={vote.id} className={isWinningVote ? 'row-won' : 'row-lost'}>
                   <td><h5>{vote.voter.fullName} </h5></td>
                   <td><h5>{vote.candidate.fullName}</h5></td>
-                  <td><h5>{new Date(vote.createdAt).toLocaleString()}</h5></td>
+                  <td><h5>{getOrdinalDateTime(vote.createdAt)}</h5></td>
                   <td>
                     <span className={
                         currentElection.isClosed 

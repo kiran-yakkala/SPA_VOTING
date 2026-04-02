@@ -5,10 +5,11 @@ import {uiActions} from '../store/ui-slice';
 import {voteActions} from '../store/vote-slice';
 import axios from 'axios';
 import CloseElectionModal from './CloseElectionModal';
+import {getOrdinalDate} from './util'
 
 
 const Election = ({ election, isNext }) => {
-const { _id: id, title, description, thumbnail, isClosed, winner } = election;
+const { _id: id, title, description, thumbnail, isClosed, winner, matchdate, matchtimeslot } = election;
     const dispatch = useDispatch();
     const [isAdmin, setIsAdmin] = React.useState([]);
     const [winningCandidate, setWinningCandidate] = React.useState([])
@@ -39,7 +40,7 @@ const { _id: id, title, description, thumbnail, isClosed, winner } = election;
           const votedElections = await response.data.votedElections;
           console.log("can vote votedElections...", votedElections)
     
-          if(votedElections.includes(id)){
+          if(votedElections && votedElections.includes(id)){
             console.log("can vote selectedElection...", id)
             setCanVote(false);
           }
@@ -93,6 +94,7 @@ const { _id: id, title, description, thumbnail, isClosed, winner } = election;
         <div className='election__info'>
             <Link to={`/elections/${id}`}><h4>{title}</h4></Link>
             <p>{description?.length > 255 ? description?.substring(0, 255) + '...' : description}</p>
+            <p>{getOrdinalDate(matchdate)} - {matchtimeslot}</p>
             {isClosed && (
                     <div className="election__winner-box">
                         <div className="winner-display-row">
@@ -106,11 +108,15 @@ const { _id: id, title, description, thumbnail, isClosed, winner } = election;
             <div className='election__cta'>
                 <Link to={`/elections/${id}`} className='btn sm'>View Votes</Link>
                 {!isClosed && <>
-                  <Link to={`/elections/${id}/candidates`} className='btn sm'>
-                      {
-                          canVote ? "Vote Match" : "Already Voted"
-                      }
-                  </Link>
+                 {canVote ? (
+                    <Link to={`/elections/${id}/candidates`} className='btn sm'>
+                      Vote Match
+                    </Link>
+                  ) : (
+                    <button className='btn sm btn-disabled' disabled={true}>
+                      Already Voted
+                    </button>
+                  )}
                   {isAdmin && <button className='btn sm primary' onClick={openCloseElectionModal}>Close Match</button>}
                   {isAdmin && <button className='btn sm primary' onClick={openModal}>Edit</button>}
                 </>}

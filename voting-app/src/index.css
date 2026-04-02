@@ -764,6 +764,20 @@ nav {
     pointer-events: auto;
 }
 
+.btn-disabled {
+    background-color: #ccc; /* Grey background */
+    color: #000901;           /* Faded text */
+    cursor: not-allowed;   /* Shows a 'block' icon on hover */
+    border: 1px solid #999;
+    opacity: 0.7;
+}
+
+/* Optional: Remove hover effects for disabled state */
+.btn-disabled:hover {
+    background-color: #ccc;
+    transform: none;
+}
+
 .elections__menu::-webkit-scrollbar-track {
   background: var(--color-gray-100); /* The "path" of the scrollbar */
   border-radius: 10px;

@@ -5,6 +5,7 @@ const {getElection, getElections, addElection, updateElection,
     removeElection, getElectionCandidates, getElectionVoters, getElectionsForIds, 
     getElectionCandidatesWithVotes, closeElection, migrateData} = require("../controllers/electionController")
 const {addCandidate, getCandidate, getCandidates, removeCandidate, updateCandidate} = require("../controllers/candidateController")
+const {addTeam, getTeam, getTeams, removeTeam, updateTeam} = require("../controllers/teamController")
 const router = Router()
 const authMiddleware = require("../middleware/authMiddleware")
 
@@ -39,6 +40,12 @@ router.get('/candidates/:id', authMiddleware, getCandidate);
 router.get('/candidates', authMiddleware, getCandidates);
 router.delete('/candidates/:id', authMiddleware, removeCandidate);
 router.patch('/candidates/:id', authMiddleware, updateCandidate);
+
+router.post('/teams', authMiddleware, addTeam);
+router.get('/teams/:id', authMiddleware, getTeam);
+router.get('/teams', authMiddleware, getTeams);
+router.delete('/teams/:id', authMiddleware, removeTeam);
+router.patch('/teams/:id', authMiddleware, updateTeam);
 
 router.post('/migrate', authMiddleware, migrateData)
 
