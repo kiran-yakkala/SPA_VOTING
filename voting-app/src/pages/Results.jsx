@@ -10,6 +10,9 @@ const Results = () => {
 const [elections, setElections] = React.useState([]);
 const navigate = useNavigate();
 
+ const sortedElections = elections.filter(election => election)
+                                    .sort((a, b) => new Date(b.matchdate) - new Date(a.matchdate));
+
 const getElections = async() => {
   try{
     const savedToken = localStorage.getItem("token")
@@ -35,7 +38,7 @@ useEffect(() => {
     <section className = "results">
       <div className="container results__container">
         {
-          elections.map(election => <ResultElection key={election._id} {...election} />)
+          sortedElections.map(election => <ResultElection key={election._id} {...election} />)
         }
       </div>
     </section>

@@ -28,7 +28,7 @@ const Login = () => {
       localStorage.setItem("currentUser", JSON.stringify(newVoter))
       localStorage.setItem("token", newVoter.token)
       dispatch(voteActions.changeCurrentVoter(newVoter))
-      navigate('/results')
+      navigate('/elections')
     } catch(error){
       setError(error.response.data.message)
     }
