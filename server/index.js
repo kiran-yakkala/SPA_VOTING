@@ -13,7 +13,7 @@ const { notFound, errorHandler } = require("./middleware/errorMiddleware")
 const app = express()
 app.use(express.json({extended: true}))
 app.use(express.urlencoded({extended: true}))
-app.use(cors({credentials: true, origin:["http://localhost:3000","https://69cdd735a69a2af555e6f3b3--kiran-spavoting.netlify.app/"]}))
+app.use(cors({credentials: true, origin:["http://localhost:3000","https://69cdd735a69a2af555e6f3b3--kiran-spavoting.netlify.app/","https://kiran-spavoting.netlify.app/"]}))
 app.use(upload())
 
 app.use('/api', Routes);
