@@ -86,10 +86,29 @@ const addCandidate = async (req, res, next) => {
 */
 const getCandidate = async (req, res, next) => {
     try {
-        const {id} = req.params;        
-        console.log("In getCandidate ", id)
+        const { id } = req.params;
+        console.log("In getCandidate ", id);
+
+        // 1. Find the candidate and populate the linked team data
         const candidate = await CandidateModel.findById(id)
-        res.status(201).json(candidate)
+            .populate('team')
+            .lean(); // Converts to plain JS object so we can modify it
+
+        if (!candidate) {
+            return next(new HttpError("Candidate not found", 404));
+        }
+
+        // 2. Flatten the team details into the top level
+        const flattenedCandidate = {
+            ...candidate,
+            fullName: candidate.team?.name || "Unknown Team",
+            image: candidate.team?.image || "",
+            motto: candidate.team?.motto || "",
+            // You can also add lastfive here if needed
+            lastfive: candidate.team?.lastfive || ""
+        };
+
+        res.status(200).json(flattenedCandidate);
 
     } catch(error) {
         console.log("In error ", error.message)
@@ -105,8 +124,22 @@ const getCandidate = async (req, res, next) => {
 const getCandidates = async (req, res, next) => {
     try {
               
+        // 1. Find all candidates and populate their linked team data
         const candidates = await CandidateModel.find()
-        res.status(201).json(candidates)
+            .populate('team')
+            .lean(); // Convert to plain JS objects for modification
+
+        // 2. Flatten the data for each candidate in the array
+        const flattenedCandidates = candidates.map(candidate => ({
+            ...candidate,
+            fullName: candidate.team?.name || "Unknown Team",
+            image: candidate.team?.image || "",
+            motto: candidate.team?.motto || "",
+            lastfive: candidate.team?.lastfive || ""
+        }));
+
+        // Use 200 for successful GET requests
+        res.status(200).json(flattenedCandidates);
 
     } catch(error) {
         console.log("In error ", error.message)
@@ -169,7 +202,7 @@ const updateCandidate = async (req, res, next) => {
         
         console.log("in update candidate")
         const {id: candidateId} = req.params;  
-        console.log("in update candidate", req.body)
+        console.log("in update candidate req.user", req.user)
         const {electionId: selectedElection} = req.body;
         
         // get the candidate

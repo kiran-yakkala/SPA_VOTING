@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import {getOrdinalDateTime} from '../components/util'
 
 const Profile = () => {
-
+     const[showNav, setShowNav] = useState(window.innerWidth < 600 ? false : true);
      const currentVoter = useSelector(state => state?.vote?.currentVoter)
      const [votedElections, setVotedElections] = useState([]);
 
@@ -58,23 +58,22 @@ const Profile = () => {
                 <h3>My Voting History</h3>
                 {votedElections.length > 0 ? (
                     <div className="election-list">
-                        <menu className='votes'>
+                        <menu className='voters'>
                             <table className='voters__table'>
                                 <thead>
                                 <tr>
                                     <th>Election</th>
-                                    <th>Vote casted to</th>
-                                    <th>Vote casted at</th>
                                     <th>Results</th>
+                                    <th>Vote casted to</th>
+                                    <th>Vote casted at</th>                                    
                                 </tr>
                                 </thead>
                                 <tbody>
                                 {
                                 votedElections.map(vote => 
-                                    <tr key={vote.id} className={vote.election.winner ? 'row-won' : 'row-lost'}>
-                                        <td>{vote.election.title}</td>
-                                        <td>{vote.candidate.fullName}</td>
-                                        <td>{getOrdinalDateTime(vote.createdAt)}</td>
+                                    <tr key={vote.id} className={vote.election.winner && vote.candidate._id === vote.election.winner ?'row-won' : 'row-lost'}>
+                                        <td><h5>{vote.election.title} </h5>
+                                        </td>
                                         <td>
                                             <Link to={`/elections/${vote.election._id}`} className="btn-results">
                                                 {vote.election.winner ? (
@@ -95,7 +94,12 @@ const Profile = () => {
                                                     </>                                                    
                                                 )}
                                             </Link>
+                                            <small className="mobile-only-info">
+                                                Voted for: {vote.candidate.fullName}
+                                            </small>
                                         </td>
+                                        <td><h5>{vote.candidate.fullName}</h5></td>
+                                        <td><h5>{getOrdinalDateTime(vote.createdAt)}</h5></td>                                        
                                     </tr>
                                 )
                                 }

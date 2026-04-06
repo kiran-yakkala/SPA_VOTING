@@ -9,7 +9,7 @@ import {getOrdinalDate} from './util'
 
 
 const Election = ({ election, isNext }) => {
-const { _id: id, title, description, thumbnail, isClosed, winner, matchdate, matchtimeslot } = election;
+const { _id: id, title, description, thumbnail, isClosed, winner, matchdate, matchtimeslot, noresult } = election;
     const dispatch = useDispatch();
     const [isAdmin, setIsAdmin] = React.useState([]);
     const [winningCandidate, setWinningCandidate] = React.useState([])
@@ -99,8 +99,8 @@ const { _id: id, title, description, thumbnail, isClosed, winner, matchdate, mat
                     <div className="election__winner-box">
                         <div className="winner-display-row">
                           <span className="winner-label">🏆 Winner:</span>
-                          <h5 className="winner-name">
-                              {winningCandidate?.fullName || "Results Pending"}
+                          <h5 className="winner-name"> 
+                              {noresult ? "No Result" : winningCandidate?.fullName || "Results Pending"}
                           </h5>
                       </div>
                     </div>

@@ -159,9 +159,9 @@ const ElectionDetails = () => {
             <thead>
               <tr>
                 <th>Full Name</th>
+                 <th>Result</th> 
                 <th>Voted to</th>
-                <th>Time</th>   
-                <th>Result</th>         
+                <th>Time</th>                          
               </tr>
             </thead>
             <tbody>
@@ -170,9 +170,9 @@ const ElectionDetails = () => {
                 const isWinningVote = vote.candidate.isWinner;
                 return(
                 <tr key={vote.id} className={isWinningVote ? 'row-won' : 'row-lost'}>
-                  <td><h5>{vote.voter.fullName} </h5></td>
-                  <td><h5>{vote.candidate.fullName}</h5></td>
-                  <td><h5>{getOrdinalDateTime(vote.createdAt)}</h5></td>
+                  <td><h5>{vote.voter.fullName} <small className="mobile-only-info">
+                                                Voted for: {vote.candidate.fullName}
+                                            </small></h5></td>
                   <td>
                     <span className={
                         currentElection.isClosed 
@@ -182,6 +182,8 @@ const ElectionDetails = () => {
                         {currentElection.isClosed ? isWinningVote ? '🏆 Won' : 'Lost' : 'Pending'}
                     </span>
                   </td>
+                  <td><h5>{vote.candidate.fullName}</h5></td>
+                  <td><h5>{getOrdinalDateTime(vote.createdAt)}</h5></td>
                 </tr>)
               }
                 

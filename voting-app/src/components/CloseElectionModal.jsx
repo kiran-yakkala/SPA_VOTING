@@ -110,11 +110,13 @@ const CloseElectionModal = () => {
                             }}
                             className="winner-dropdown">
                                 <option value="">-- Select Winner --</option>
-                                    {electionCandidates.map(candidate => (
-                                <option key={candidate._id} value={candidate._id}>
-                                    {candidate.fullName}
-                                </option>
-                            ))}
+                                {electionCandidates.map(candidate => (
+                                    <option key={candidate._id} value={candidate._id}>
+                                        {candidate.fullName}
+                                    </option>
+                                
+                                ))}
+                                <option value="NR">🚫 No Result (Abandoned/Tie)</option>
                         </select>
                     </div>
                 </div>

@@ -514,7 +514,7 @@ nav {
   position: fixed;
   top:0;
   left:0;
-  z-index: 2;
+  z-index: 2000; 
   width: 100vw;
   height: 100vh;
   background: rgba(0, 0, 0, 0.7);
@@ -535,7 +535,7 @@ nav {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 2rem;
+  padding: 2rem 2rem 0.2rem;
 } 
 
 .modal h4 {
@@ -549,22 +549,12 @@ nav {
 } 
 
 .modal__content form {
-  margin-top: 2rem;
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
   padding: 2rem;
   padding-bottom: 3rem;
 }
-
-.modal__content form input {
-  margin-top: 2rem;
-  width:100%;
-  padding: 0.8rem 1rem;
-  background: var(--color-gray-100);
-  color:var(--color-gray-900);
-  border-radius: var(--radius-1);
-} 
 
 .modal__selection {
   display: flex;
@@ -762,6 +752,34 @@ nav {
 /* Re-enable pointer events for specific buttons inside the card if needed */
 .election__cta a, .election__cta button {
     pointer-events: auto;
+}
+.form__group-inline {
+    display: flex;
+    align-items: center; /* Vertically centers the label with the input */
+   
+}
+
+.form__group-inline h6 {
+    margin: 0;
+    min-width: 80px; 
+    font-weight: 600;
+    align-items: center;
+}
+
+.form__group-inline input {
+    flex: 1; /* Makes the textbox take up the remaining width */
+    padding: 0.8rem;
+    border-radius: var(--radius-1);
+    border: 1px solid var(--color-gray-200);
+    background: var(--color-gray-100);
+}
+
+.form__group-inline select {
+    flex: 1; /* Makes the textbox take up the remaining width */
+    padding: 0.8rem;
+    border-radius: var(--radius-1);
+    border: 1px solid var(--color-gray-200);
+    background: var(--color-gray-100);
 }
 
 .btn-disabled {
@@ -1116,6 +1134,24 @@ nav {
   width: 100%;
 }
 
+.voters__table td {
+  /* 1. Force vertical centering */
+  vertical-align: middle; 
+  
+  /* 2. Optional: Horizontal centering if you want it in the middle of the column */
+  /* text-align: center; */
+  
+  padding: 1rem; 
+}
+
+.voters__table td h5 {
+  /* 3. Remove default browser margins that push text to the top/bottom */
+  margin: 0; 
+  
+  /* 4. Ensure the line height doesn't add extra space */
+  line-height: 1; 
+}
+
 .voters__table thead th {
    text-align: left;
    padding: 0.7rem 1.5rem;
@@ -1311,7 +1347,11 @@ tr.row-lost td {
   width: 7rem;
   height: 7rem;
 }
-
+.mobile-only-info {
+    display: none;
+    font-size: 0.75rem;
+    color: var(--color-gray-500);
+}
 
 
 
@@ -1395,6 +1435,31 @@ tr.row-lost td {
     flex-direction: column;
     width:100%;
   }
+
+  /* Hide the 3rd and 4th headers */
+    .voters__table th:nth-child(3),
+    .voters__table th:nth-child(4) {
+        display: none;
+    }
+
+    /* Hide the 3rd and 4th data cells */
+    .voters__table td:nth-child(3),
+    .voters__table td:nth-child(4) {
+        display: none;
+    }
+
+    /* Optional: Make the remaining cells take up more space */
+    .voters__table td:nth-child(1) {
+        width: 60%;
+    }
+    .voters__table td:nth-child(2) {
+        width: 40%;
+        text-align: right;
+    }
+    .mobile-only-info {
+        display: block; /* Shows under the title on mobile */
+        margin-top: 0.2rem;
+    }
 
 }
 

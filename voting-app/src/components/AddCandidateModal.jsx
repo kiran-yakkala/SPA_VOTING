@@ -20,7 +20,7 @@ const AddCandidateModal = () => {
     const closeModal = () => {
         dispatch(uiActions.closeAddCandidateModal())
     }
-    
+
     const addCandidate =  async(e) => {
         e.preventDefault();
         try {
