@@ -9,12 +9,19 @@ import {getOrdinalDate} from './util'
 
 
 const Election = ({ election, isNext }) => {
-const { _id: id, title, description, thumbnail, isClosed, winner, matchdate, matchtimeslot, noresult } = election;
+    const { _id: id, title, description, thumbnail, isClosed, winner, matchdate, matchtimeslot, noresult } = election;
     const dispatch = useDispatch();
     const [isAdmin, setIsAdmin] = React.useState([]);
     const [winningCandidate, setWinningCandidate] = React.useState([])
-      const [canVote, setCanVote] = React.useState(true);
-      const openCloseElectionModalShowing = useSelector(state => state.ui.closeElectionModalShowing);
+    const [canVote, setCanVote] = React.useState(true);
+    const openCloseElectionModalShowing = useSelector(state => state.ui.closeElectionModalShowing);
+
+    // 1. Get today's date as a string (e.g., "2023-10-27")
+    const today = new Date().toISOString().split('T')[0];
+    // 2. Format the match's date the same way
+    const matchDay = new Date(matchdate).toISOString().split('T')[0];
+    // 3. Compare only the date strings
+    const isTodayMatch = today === matchDay;
 
     // Open update election modal
     const openModal = () => {
@@ -80,13 +87,13 @@ const { _id: id, title, description, thumbnail, isClosed, winner, matchdate, mat
 
   return (
     <>
-        <article className={`election ${isNext ? 'election--next' : ''}`}>
+        <article className={`election ${isTodayMatch ? 'election--next' : ''}`}>
         <div className='election__image'>
                 <img src={thumbnail} alt={title}/>
                 {/* --- ADD THE NEXT LABEL HERE --- */}
-                {isNext && (
+                {isTodayMatch  && (
                     <div className="next-match-badge glow-animation">
-                        NEXT MATCH
+                        Todays MATCH
                     </div>
                 )}
             </div>

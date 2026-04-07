@@ -27,13 +27,32 @@ const openModal = () => {
 const electionModalShowing = useSelector(state => state.ui.electionModalShowing);
 const updateElectionModalShowing = useSelector(state => state.ui.updateElectionModalShowing);
 
- // 2. DERIVE the lists (This runs every time the component renders)
-    const ongoingElections = elections.filter(election => !election.isClosed)
-                                    .sort((a, b) => new Date(a.matchdate) - new Date(b.matchdate));
-    // 2. The "Next Match" is the first one in this sorted array
-    const nextMatchId = ongoingElections[0]?._id; 
-    const closedElections = elections.filter(election => election.isClosed)
-                                    .sort((a, b) => new Date(b.matchdate) - new Date(a.matchdate));
+// Helper to create a comparable timestamp from date and timeslot
+const getSortableDate = (match) => {
+    if (!match.matchdate || !match.timeslot) return 0;
+
+    // Extract the time from brackets: "(07:30 PM)" -> "07:30 PM"
+    const timeMatch = match.timeslot.match(/\((.*?)\)/);
+    const timePart = timeMatch ? timeMatch[1] : "";
+
+    // Create a full Date object for precise comparison
+    return new Date(`${match.matchdate} ${timePart}`).getTime();
+};
+
+
+// 1. Sort Ongoing Matches (Earliest first)
+const ongoingElections = elections
+    .filter(election => !election.isClosed)
+    .sort((a, b) => getSortableDate(a) - getSortableDate(b));
+
+const nextMatchId = ongoingElections[0]?._id;
+
+// 2. Sort Closed Matches (Most recent first)
+const closedElections = elections
+    .filter(election => election.isClosed)
+    .sort((a, b) => getSortableDate(b) - getSortableDate(a));
+
+
 
 const getElections = async() => {
   setIsLoading(true)

@@ -8,7 +8,7 @@ import CloseElectionModal from './CloseElectionModal';
 
 
 const Team = ({ team }) => {
-    const { _id: id, name, description, image, motto, lastfive } = team;
+    const { _id: id, name, description, image, motto, lastfive, played, won, lost, ranking, points } = team;
     const dispatch = useDispatch();
     const [isAdmin, setIsAdmin] = React.useState([]);
     // Open update election modal
@@ -34,7 +34,12 @@ const Team = ({ team }) => {
                 <h4>{name}</h4>
                 <p>{description?.length > 255 ? description?.substring(0, 255) + '...' : description}</p>
                 <p>{motto?.length > 255 ? motto?.substring(0, 255) + '...' : motto}</p>
-                <p>{lastfive}</p>
+                <p>{lastfive} (Most recent first)</p>
+                <p>Played : {played} </p>
+                <p>Won : {won} </p>
+                <p>Lost : {lost} </p>
+                <p>Points : {points} </p>
+                <p>Ranking : {ranking} </p>
                 <div className='election__cta'>                               
                     {isAdmin && <button className='btn sm primary' onClick={openModal}>Edit</button>}                               
                  </div>                

@@ -158,7 +158,7 @@ console.log("electionData in update electionmodel", electionData)
                                 name="slot" 
                                 required >
                                 <option value="">-- Choose Slot --</option>
-                                <option value="Afternoon (03:30 AM)">Afternoon (03:30 AM)</option>
+                                <option value="Afternoon (03:30 PM)">Afternoon (03:30 PM)</option>
                                 <option value="Evening (07:30 PM)">Evening (07:30 PM)</option>
                             </select>
                         </div>

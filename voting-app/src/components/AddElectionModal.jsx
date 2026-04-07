@@ -125,7 +125,7 @@ const AddElectionModal = () => {
                                 disabled={!matchdate} // Disable until Team 1 is picked
                                 required >
                                 <option value="">-- Choose Slot --</option>
-                                <option value="Afternoon (03:30 AM)">Afternoon (03:30 AM)</option>
+                                <option value="Afternoon (03:30 PM)">Afternoon (03:30 PM)</option>
                                 <option value="Evening (07:30 PM)">Evening (07:30 PM)</option>
                             </select>
                         </div>

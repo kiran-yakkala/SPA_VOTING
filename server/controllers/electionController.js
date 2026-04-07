@@ -8,7 +8,7 @@ const voterModel = require('../models/voterModel');
 const voteModel = require('../models/voteModel');
 const counter = require('../models/counter');
 const electionModel = require('../models/electionModel');
-
+const TeamModel = require('../models/teamModel')
 
 
 /*
@@ -101,6 +101,7 @@ const addElection = async (req, res, next) => {
             await newElection.save();
 
             res.status(201).json(newElection)
+            
 
         })
     } catch (error) {
@@ -368,7 +369,7 @@ const getElectionsForIds = async (req, res, next) => {
 */
 const closeElection = async (req, res, next) => {
     try {
-        // only admin can add election
+        // only admin can close election
         if(!req.user.isAdmin) {
             return next(new HttpError("Only an admin can perform this action.", 403))
         }
@@ -397,16 +398,36 @@ const closeElection = async (req, res, next) => {
         if (winnerId === "NR") {
             noResultValue = true;
             winnerValue = null;
+             // Extract all unique team IDs from the election candidates
+            for (let candidate of existingElection.candidates) {
+                const team = await TeamModel.findById(candidate.team);
+                if (team) {
+                    await TeamModel.findByIdAndUpdate(team._id, {
+                        $inc: { played: 1, points: 1 },
+                        $set: { lastfive: updateForm(team.lastfive, 'NR') } // 'D' for Draw/NR
+                    });
+                }
+            }
         } else if (winnerId) {
-            // 2. Handle Actual Winner Logic
-            const winnerCandidate = await CandidateModel.findByIdAndUpdate(
-                winnerId,
-                { isWinner: true },
-                { new: true, runValidators: true }
-            );
+            // 2. Identify Winner and Loser Candidates from the election
+            const winnerCand = existingElection.candidates.find(c => c._id.toString() === winnerId);
+            const loserCand = existingElection.candidates.find(c => c._id.toString() !== winnerId);
 
-            if (!winnerCandidate) {
-                return next(new HttpError("Winner candidate not found", 404));
+            if (!winnerCand) return next(new HttpError("Winner candidate not found", 404));
+
+            // Update Winner Candidate & Team
+            await CandidateModel.findByIdAndUpdate(winnerId, { isWinner: true });
+            await TeamModel.findByIdAndUpdate(winnerCand.team, {
+                $inc: { played: 1, won: 1, points: 2 }, // Assuming 3 points for a win
+                $set: { lastfive: updateForm(winnerCand.team.lastfive, 'W') } 
+            });
+
+            // Update Loser Team (if exists)
+            if (loserCand) {
+                await TeamModel.findByIdAndUpdate(loserCand.team, {
+                    $inc: { played: 1, lost: 1 },
+                    $set: { lastfive: updateForm(loserCand.team.lastfive, 'L') }
+                });
             }
             winnerValue = winnerId;
         }
@@ -431,12 +452,51 @@ const closeElection = async (req, res, next) => {
             responseData.winningCandidateName = responseData.winner.team.name;
         }
 
+        // 3. Trigger Global Re-ranking
+        await updateGlobalRankings();
+
         res.status(200).json(responseData);
     } catch (error){
         console.log("In error ", error.message);
         return next(new HttpError("Could not close specified election", 500));
     }
     
+};
+
+// Helper to manage the "lastfive" string with hyphens (e.g., "W-W-D-L-W")
+const updateForm1 = (currentForm = "", result) => {
+    // 1. Remove existing hyphens and split into an array of characters
+    let formArray = currentForm.replace(/-/g, '').split('');
+    
+    // 2. Add the newest result ('W', 'L', or 'D') to the front
+    formArray.unshift(result);
+    
+    // 3. Keep only the 5 most recent results and join with a hyphen
+    return formArray.slice(0, 5).join('-');
+};
+
+const updateForm = (currentForm = "", result) => {
+    // 1. Split by hyphen to handle multi-character strings like "NR"
+    // Filter out empty strings in case the initial value is empty
+    let formArray = currentForm ? currentForm.split('-').filter(item => item !== "") : [];
+    
+    // 2. Add the newest result ("W", "L", or "NR") to the front
+    formArray.unshift(result);
+    
+    // 3. Keep only the 5 most recent results and join back with hyphens
+    return formArray.slice(0, 5).join('-');
+};
+
+// HELPER: Re-calculate ranking for all teams
+const updateGlobalRankings = async () => {
+    // Sort by points (descending), then by won (descending) as tie-breaker
+    const teams = await TeamModel.find().sort({ points: -1, won: -1 });
+    
+    const rankUpdates = teams.map((team, index) => {
+        return TeamModel.findByIdAndUpdate(team._id, { ranking: index + 1 });
+    });
+
+    await Promise.all(rankUpdates);
 };
 
 const migrateData = async () => {
@@ -450,6 +510,62 @@ const migrateData = async () => {
         { $set: { seq: matches.length } },
         { upsert: true }
     );
+};
+
+const syncHistoricalData = async () => {
+    try {
+        // 1. Reset all teams to 0 stats before recalculating
+        await TeamModel.updateMany({}, {
+            played: 0, won: 0, lost: 0, points: 0, lastfive: ""
+        });
+
+        // 2. Fetch all closed elections
+        const closedElections = await ElectionModel.find({ isClosed: true }).populate('candidates');
+
+        for (const election of closedElections) {
+            const { winner, noresult, candidates } = election;
+
+            if (noresult) {
+                // NR Logic: +1 point, +1 played for all participating teams
+                for (const cand of candidates) {
+                    const team = await TeamModel.findById(cand.team);
+                    if (team) {
+                        await TeamModel.findByIdAndUpdate(team._id, {
+                            $inc: { played: 1, points: 1 },
+                            $set: { lastfive: updateForm(team.lastfive, 'NR') }
+                        });
+                    }
+                }
+            } else if (winner) {
+                // Win/Loss Logic
+                const winnerCand = candidates.find(c => c._id.toString() === winner.toString());
+                const loserCand = candidates.find(c => c._id.toString() !== winner.toString());
+
+                if (winnerCand) {
+                    const winTeam = await TeamModel.findById(winnerCand.team);
+                    await TeamModel.findByIdAndUpdate(winnerCand.team, {
+                        $inc: { played: 1, won: 1, points: 2 },
+                        $set: { lastfive: updateForm(winTeam.lastfive, 'W') }
+                    });
+                }
+
+                if (loserCand) {
+                    const loseTeam = await TeamModel.findById(loserCand.team);
+                    await TeamModel.findByIdAndUpdate(loserCand.team, {
+                        $inc: { played: 1, lost: 1 },
+                        $set: { lastfive: updateForm(loseTeam.lastfive, 'L') }
+                    });
+                }
+            }
+        }
+
+        // 3. Recalculate rankings once all matches are processed
+        await updateGlobalRankings();
+
+        console.log("Historical data synced successfully.");
+    } catch (error) {
+        console.log("In error Sync failed", error.message);
+    }
 };
 
 
