@@ -179,7 +179,7 @@ const ElectionDetails = () => {
                               ? `status-badge ${isWinningVote ? 'badge-win' : 'badge-loss'}` 
                               : 'status-badge neutral' // Neutral class when ongoing
 }>
-                        {currentElection.isClosed ? isWinningVote ? '🏆 Won' : 'Lost' : 'Pending'}
+                        {currentElection.isClosed ? isWinningVote ? '🏆 Won' : ( currentElection.noresult ? 'No Result' : 'Lost') : 'Pending'}
                     </span>
                   </td>
                   <td><h5>{vote.candidate.fullName}</h5></td>

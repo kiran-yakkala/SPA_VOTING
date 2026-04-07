@@ -89,7 +89,9 @@ const Profile = () => {
                                                 ) : (
                                                     /* If no winner is declared yet */
                                                     <>
-                                                    <span className="vote-status status-pending">PENDING</span>
+                                                    {vote.election.noresult ? 
+                                                    <span className="vote-status status-pending">NO RESULT</span> : 
+                                                    <span className="vote-status status-pending">PENDING</span>}
                                                     <span className="view-results-text"> (View Results)</span>
                                                     </>                                                    
                                                 )}

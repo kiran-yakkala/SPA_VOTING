@@ -16,7 +16,7 @@ const getDetailedVoterHistory = async (req, res, next) => {
 
         // 1. Find votes and use nested population: Vote -> Candidate -> Team
         const votes = await VoteModel.find({ voter: id })
-            .populate('election', 'title thumbnail winner')
+            .populate('election', 'title thumbnail winner noresult')
             .populate({
                 path: 'candidate',
                 populate: {
