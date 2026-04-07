@@ -38,6 +38,7 @@ const Team = ({ team }) => {
                 <p>Played : {played} </p>
                 <p>Won : {won} </p>
                 <p>Lost : {lost} </p>
+                <p>N/R : {played-(won+lost)} </p>
                 <p>Points : {points} </p>
                 <p>Ranking : {ranking} </p>
                 <div className='election__cta'>                               
