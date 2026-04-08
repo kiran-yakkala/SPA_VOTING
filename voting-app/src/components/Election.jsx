@@ -40,18 +40,14 @@ const Election = ({ election, isNext }) => {
         try {
           const user = JSON.parse(localStorage.getItem("currentUser")); // Convert string to Object
           const { token, id: voterId } = user;  
-          console.log("can vote id...", voterId)
     
           const response = await axios.get(`${process.env.REACT_APP_API_URL}/voters/${voterId}`,
                   {withCredentials: true, headers:{Authorization: `Bearer ${token}`}})
           const votedElections = await response.data.votedElections;
-          console.log("can vote votedElections...", votedElections)
     
           if(votedElections && votedElections.includes(id)){
-            console.log("can vote selectedElection...", id)
             setCanVote(false);
           }
-          console.log("can vote ...", canVote)
         } catch(error){
           console.log(error)
         }
@@ -61,11 +57,9 @@ const Election = ({ election, isNext }) => {
         try {
           const user = JSON.parse(localStorage.getItem("currentUser")); // Convert string to Object
           const { token } = user; 
-    console.log("before winningCandidate...", winner)
           const response = await axios.get(`${process.env.REACT_APP_API_URL}/candidates/${winner}`,
                   {withCredentials: true, headers:{Authorization: `Bearer ${token}`}})
           const winningCandidate = await response.data;
-          console.log("can vote winningCandidate...", winningCandidate)
 
           setWinningCandidate(winningCandidate);
           
@@ -82,7 +76,6 @@ const Election = ({ election, isNext }) => {
         if(winner) {
           getWinningCandidate()
         }
-        console.log()
     },[])
 
   return (

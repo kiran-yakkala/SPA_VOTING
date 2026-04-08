@@ -29,14 +29,20 @@ const updateElectionModalShowing = useSelector(state => state.ui.updateElectionM
 
 // Helper to create a comparable timestamp from date and timeslot
 const getSortableDate = (match) => {
-    if (!match.matchdate || !match.timeslot) return 0;
+    if (!match.matchdate || !match.matchtimeslot) return 0;
 
-    // Extract the time from brackets: "(07:30 PM)" -> "07:30 PM"
-    const timeMatch = match.timeslot.match(/\((.*?)\)/);
-    const timePart = timeMatch ? timeMatch[1] : "";
+    // 1. Get ONLY the date part: "2026-04-03"
+    const datePart = match.matchdate.split('T')[0];
+    console.log("match date..", datePart)
 
-    // Create a full Date object for precise comparison
-    return new Date(`${match.matchdate} ${timePart}`).getTime();
+    // 2. Extract time from: "Evening (07:30 PM)" -> "07:30 PM"
+    const timeMatch = match.matchtimeslot.match(/\((.*?)\)/);
+    const timePart = timeMatch ? timeMatch[1] : "00:00 AM";
+
+    // 3. Combine: "2026-04-03 07:30 PM"
+    const timestamp = new Date(`${datePart} ${timePart}`).getTime();
+
+    return isNaN(timestamp) ? 0 : timestamp;
 };
 
 
@@ -63,8 +69,6 @@ const getElections = async() => {
         const electionsData = await response.data
 
         setElections(electionsData)
-
-        console.log("in elections", electionsData)
   } catch(error){
     console.log(error)
   }

@@ -3,7 +3,7 @@ const { getDetailedVoterHistory, getElectionVotes } = require("../controllers/vo
 const { registerVoter, loginVoter, getVoter, getVoters, getVoterHistory } = require("../controllers/voterController");
 const {getElection, getElections, addElection, updateElection, 
     removeElection, getElectionCandidates, getElectionVoters, getElectionsForIds, 
-    getElectionCandidatesWithVotes, closeElection, migrateData} = require("../controllers/electionController")
+    getElectionCandidatesWithVotes, closeElection, migrateData, syncHistoricalData} = require("../controllers/electionController")
 const {addCandidate, getCandidate, getCandidates, removeCandidate, updateCandidate} = require("../controllers/candidateController")
 const {addTeam, getTeam, getTeams, removeTeam, updateTeam} = require("../controllers/teamController")
 const router = Router()
@@ -48,6 +48,7 @@ router.delete('/teams/:id', authMiddleware, removeTeam);
 router.patch('/teams/:id', authMiddleware, updateTeam);
 
 router.post('/migrate', authMiddleware, migrateData)
+router.post('/syncHistoricalData', authMiddleware, syncHistoricalData)
 
 module.exports = router;
 

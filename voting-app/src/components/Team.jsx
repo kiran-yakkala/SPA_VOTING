@@ -31,16 +31,46 @@ const Team = ({ team }) => {
             </div>
         
             <div className='election__info'>
-                <h4>{name}</h4>
+                <h4>{name} - #{ranking}</h4>
                 <p>{description?.length > 255 ? description?.substring(0, 255) + '...' : description}</p>
-                <p>{motto?.length > 255 ? motto?.substring(0, 255) + '...' : motto}</p>
-                <p>{lastfive} (Most recent first)</p>
-                <p>Played : {played} </p>
-                <p>Won : {won} </p>
-                <p>Lost : {lost} </p>
-                <p>N/R : {played-(won+lost)} </p>
-                <p>Points : {points} </p>
-                <p>Ranking : {ranking} </p>
+               <br></br>
+
+                <table class="stats-table">
+                    <thead>
+                        <tr>
+                            <th>
+                                <span className="full-text">Played</span>
+                                <span className="short-text">P</span>
+                            </th>
+                            <th>
+                                <span className="full-text">Won</span>
+                                <span className="short-text">W</span>
+                            </th>
+                            <th>
+                                <span className="full-text">Lost</span>
+                                <span className="short-text">L</span>
+                            </th>
+                            <th>N/R</th>
+                            <th>
+                                <span className="full-text">Points</span>
+                                <span className="short-text">Pts</span>
+                            </th>
+                            <th className="desktop-only">Series Form (Most recent first)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>{played}</td>
+                            <td>{won}</td>
+                            <td>{lost}</td>
+                            <td>{played - (won + lost)}</td>
+                            <td>{points}</td>
+                            <td className="desktop-only">{lastfive}</td>
+                        </tr>
+                    </tbody>
+                </table>    
+
+
                 <div className='election__cta'>                               
                     {isAdmin && <button className='btn sm primary' onClick={openModal}>Edit</button>}                               
                  </div>                

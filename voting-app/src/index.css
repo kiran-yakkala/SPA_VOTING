@@ -1354,6 +1354,124 @@ tr.row-lost td {
 }
 
 
+/* stats table */
+
+.stats-table {
+  width: 100%;
+  border-collapse: collapse; /* Removes double borders */
+  text-align: center;
+  font-family: Arial, sans-serif;
+  background-color: #f9f9f9;
+}
+
+.stats-table th, .stats-table td {
+  padding: 12px 8px; /* Adds breathing room */
+  border-bottom: 1px solid #ddd; /* Clean horizontal line */
+}
+
+.stats-table th {
+  background-color: #2196f3; /* Matching your 'Next Match' blue */
+  color: white;
+  text-transform: uppercase;
+  font-size: 0.85rem;
+}
+
+.stats-table tr:hover {
+  background-color: #f1f1f1; /* Subtle hover effect */
+}
+
+.short-text {
+  display: none; /* Hide P, W, L by default */
+}
+
+.full-text {
+  display: inline;
+}
+
+
+
+
+
+
+
+
+
+
+.table-container {
+    overflow-x: auto;
+    margin: 20px 0;
+}
+
+.points-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+.points-table th {
+    background-color: #1a1a1a;
+    color: #fff;
+    padding: 12px;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+}
+
+.points-table td {
+    padding: 15px 10px;
+    text-align: center;
+    border-bottom: 1px solid #eee;
+}
+
+/* Team Section */
+.team-cell {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-align: left;
+}
+
+.team-logo {
+    width: 30px;
+    height: 30px;
+    object-fit: contain;
+}
+
+.team-name {
+    font-weight: bold;
+}
+
+/* Form Dots */
+.form-cell {
+    display: flex;
+    gap: 4px;
+    justify-content: center;
+}
+
+.form-dot {
+    font-size: 0.7rem;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 3px;
+    color: white;
+    font-weight: bold;
+}
+
+.W { background-color: #28a745; } /* Win - Green */
+.L { background-color: #dc3545; } /* Loss - Red */
+.NR { background-color: #6c757d; } /* NR - Gray */
+
+.points-cell {
+    font-weight: 800;
+    color: #2196f3;
+}
+
+
 
 @media screen and (max-width: 600px) {
 
@@ -1460,6 +1578,25 @@ tr.row-lost td {
         display: block; /* Shows under the title on mobile */
         margin-top: 0.2rem;
     }
+
+     /* 1. Swap Labels */
+  .full-text {
+    display: none;
+  }
+  .short-text {
+    display: inline;
+  }
+
+  /* 2. Hide the Form Column entirely */
+  .desktop-only {
+    display: none;
+  }
+
+  /* Optional: Adjust padding for tighter mobile fit */
+  .points-table th, .points-table td {
+    padding: 8px 4px;
+    font-size: 0.85rem;
+  }
 
 }
 

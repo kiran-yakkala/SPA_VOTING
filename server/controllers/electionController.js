@@ -377,7 +377,7 @@ const closeElection = async (req, res, next) => {
         const {id} = req.params;  
         const { winnerId } = req.body;   
         // 1. Fetch current status
-        const existingElection = await ElectionModel.findById(id);
+        const existingElection = await ElectionModel.findById(id).populate('candidates');
         
         if (!existingElection) {
             return next(new HttpError("Election not found", 404));
@@ -571,4 +571,4 @@ const syncHistoricalData = async () => {
 
 module.exports = {getElection, getElections, addElection, updateElection, 
     removeElection, getElectionCandidates, getElectionVoters, getElectionsForIds,
-    getElectionCandidatesWithVotes, closeElection, migrateData}
+    getElectionCandidatesWithVotes, closeElection, migrateData, syncHistoricalData}
