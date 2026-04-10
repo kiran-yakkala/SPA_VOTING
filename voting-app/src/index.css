@@ -345,11 +345,12 @@ nav {
 }
 
 .result__header-image {
-  width: 3rem;
-  aspect-ratio: 1/1;
+  width: 20rem;
   overflow: hidden;
-  border-radius: 50%;
-  margin: 1.5rem
+  margin: 1.5rem;
+  object-fit: contain; 
+  border-radius: 4px;
+  background: transparent; 
 }
 
 .result__header h4 {
@@ -381,6 +382,13 @@ nav {
   width: 100%
 }
 
+.result__candidate-info h5 {
+  display: flex;
+    align-items: center; /* Vertically centers the "Winner" label with the text */
+    gap: 8px;           /* Adds a nice gap between the name and the dash */
+    white-space: nowrap; /* Prevents the line from breaking into two */
+}
+
 .result__candidate-rating {
   display: flex;
   gap: 1rem;
@@ -406,8 +414,18 @@ nav {
 
 /* 1. Highlight the Winning Row */
 .result__candidate.is-winner {
-  background: rgba(255, 215, 0, 0.05); /* Very subtle gold background */
+  background: rgba(255, 217, 0, 0.258); /* Very subtle gold background */
   border: 1px solid #ffd700;
+  border-radius: 1rem;
+  padding: 0.5rem;
+  position: relative;
+  box-shadow: 0 0 10px rgba(255, 215, 0, 0.2);
+}
+
+/* 1. Highlight the Winning Row */
+.result__candidate.loser {
+  background: rgba(255, 0, 0, 0.05); /* Very subtle red background */
+  border: 1px solid #ee3107;
   border-radius: 1rem;
   padding: 0.5rem;
   position: relative;
@@ -442,6 +460,16 @@ nav {
 /* 5. Winner Text Badge */
 .winner-label {
   color: #b38728;
+  
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-size: 0.8rem;
+    color: var(--color-primary, #2196f3);
+    font-weight: bold;
+}
+
+.loser-label {
+  color: #ca101c;
   font-weight: 700;
   font-size: 0.75rem;
   text-transform: uppercase;

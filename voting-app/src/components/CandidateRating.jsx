@@ -6,13 +6,13 @@ const CandidateRating = ({fullName , image, voteCount, totalVotes, voters, isWin
   const percentage = voteCount > 0 ? (voteCount / totalVotes) * 100 : 0;
 
   return (
-    <li className={`result__candidate ${isWinner ? 'is-winner' : ''}`}>
+    <li className={`result__candidate ${isWinner ? 'is-winner' : 'loser'}`}>
         <div className="result__candidate-image">
             <img src={image} alt={fullName} />
         </div>
         <div className="result__candidate-info">
             <div>
-                <h5>{fullName} {isWinner && <span className="winner-label"> - Winner</span>}</h5>
+                <h5>{fullName} {isWinner && <span className={"winner-label"}> - Winner</span>}</h5>
                 <small>
                     {`${voteCount} ${voteCount === 1 ? "vote" : "votes"}`}    
                     -
