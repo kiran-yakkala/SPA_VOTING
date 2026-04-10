@@ -494,7 +494,7 @@ nav {
 }
 
 .candidate__image {
-  width: 100%;
+  width: 30%;
   aspect-ratio: 1/1;
   overflow: hidden;
   margin-inline: auto;
@@ -1405,15 +1405,15 @@ tr.row-lost td {
 .points-table {
     width: 100%;
     border-collapse: collapse;
-    background: #fff;
+    background: var(--color-gray-0);
     border-radius: 8px;
     overflow: hidden;
     box-shadow: 0 4px 15px rgba(0,0,0,0.1);
 }
 
 .points-table th {
-    background-color: #1a1a1a;
-    color: #fff;
+    background-color: var(--color-gray-900);
+    color: var(--color-gray-0);
     padding: 12px;
     font-size: 0.8rem;
     text-transform: uppercase;
@@ -1434,13 +1434,14 @@ tr.row-lost td {
 }
 
 .team-logo {
-    width: 30px;
-    height: 30px;
+    width: 25px;
+    height: 25px;
     object-fit: contain;
 }
 
 .team-name {
     font-weight: bold;
+    color: var(--color-gray-500);
 }
 
 /* Form Dots */
@@ -1458,7 +1459,7 @@ tr.row-lost td {
     align-items: center;
     justify-content: center;
     border-radius: 3px;
-    color: white;
+    color:  var(--color-gray-900);
     font-weight: bold;
 }
 

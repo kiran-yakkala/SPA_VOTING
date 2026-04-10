@@ -85,7 +85,7 @@ useEffect(() =>{
                 <th>L</th>
                 <th>N/R</th>
                 <th>Pts</th>
-                <th>Form</th>
+                <th>Form ( Latest First)</th>
             </tr>
         </thead>
         <tbody>

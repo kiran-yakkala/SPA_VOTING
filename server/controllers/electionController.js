@@ -377,7 +377,10 @@ const closeElection = async (req, res, next) => {
         const {id} = req.params;  
         const { winnerId } = req.body;   
         // 1. Fetch current status
-        const existingElection = await ElectionModel.findById(id).populate('candidates');
+       const existingElection = await ElectionModel.findById(id).populate({
+            path: 'candidates',
+            populate: { path: 'team' } // This fetches the actual Team document for each candidate
+        });
         
         if (!existingElection) {
             return next(new HttpError("Election not found", 404));
@@ -400,11 +403,10 @@ const closeElection = async (req, res, next) => {
             winnerValue = null;
              // Extract all unique team IDs from the election candidates
             for (let candidate of existingElection.candidates) {
-                const team = await TeamModel.findById(candidate.team);
-                if (team) {
-                    await TeamModel.findByIdAndUpdate(team._id, {
+                if (candidate.team) {
+                    await TeamModel.findByIdAndUpdate(candidate.team._id, {
                         $inc: { played: 1, points: 1 },
-                        $set: { lastfive: updateForm(team.lastfive, 'NR') } // 'D' for Draw/NR
+                        $set: { lastfive: updateForm(candidate.team.lastfive, 'NR') } // 'D' for Draw/NR
                     });
                 }
             }
@@ -417,14 +419,14 @@ const closeElection = async (req, res, next) => {
 
             // Update Winner Candidate & Team
             await CandidateModel.findByIdAndUpdate(winnerId, { isWinner: true });
-            await TeamModel.findByIdAndUpdate(winnerCand.team, {
+            await TeamModel.findByIdAndUpdate(winnerCand.team._id, {
                 $inc: { played: 1, won: 1, points: 2 }, // Assuming 3 points for a win
                 $set: { lastfive: updateForm(winnerCand.team.lastfive, 'W') } 
             });
 
             // Update Loser Team (if exists)
             if (loserCand) {
-                await TeamModel.findByIdAndUpdate(loserCand.team, {
+                await TeamModel.findByIdAndUpdate(loserCand.team._id, {
                     $inc: { played: 1, lost: 1 },
                     $set: { lastfive: updateForm(loserCand.team.lastfive, 'L') }
                 });
