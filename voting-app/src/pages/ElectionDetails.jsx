@@ -7,8 +7,7 @@ import {voteActions} from '../store/vote-slice';
 import {useDispatch, useSelector} from 'react-redux';
 import AddCandidateModal from '../components/AddCandidateModal';
 import axios from 'axios';
-import { GiCrossMark } from "react-icons/gi";
-import {getOrdinalDateTime} from '../components/util'
+import VotersTable from '../components/VotersTable';
 
 const ElectionDetails = () => {
   
@@ -153,45 +152,7 @@ const ElectionDetails = () => {
           {isAdmin && !currentElection.isClosed && electionCandidates.length < 2 && <button className="add__candidate-btn"
                   onClick = {openModal}><IoMdAdd /></button> }
         </menu>
-        <menu className='voters'>
-          <h2>Voters</h2>
-          <table className='voters__table'>
-            <thead>
-              <tr>
-                <th>Full Name</th>
-                 <th>Result</th> 
-                <th>Voted to</th>
-                <th>Time</th>                          
-              </tr>
-            </thead>
-            <tbody>
-             {
-              electionVotes.map(vote => {
-                const isWinningVote = vote.candidate.isWinner;
-                return(
-                <tr key={vote.id} className={isWinningVote ? 'row-won' : 'row-lost'}>
-                  <td><h5>{vote.voter.fullName} <small className="mobile-only-info">
-                                                Voted for: {vote.candidate.fullName}
-                                            </small></h5></td>
-                  <td>
-                    <span className={
-                        currentElection.isClosed 
-                              ? `status-badge ${isWinningVote ? 'badge-win' : 'badge-loss'}` 
-                              : 'status-badge neutral' // Neutral class when ongoing
-}>
-                        {currentElection.isClosed ? isWinningVote ? '🏆 Won' : ( currentElection.noresult ? 'No Result' : 'Lost') : 'Pending'}
-                    </span>
-                  </td>
-                  <td><h5>{vote.candidate.fullName}</h5></td>
-                  <td><h5>{getOrdinalDateTime(vote.createdAt)}</h5></td>
-                </tr>)
-              }
-                
-              )
-             }
-            </tbody>
-          </table>
-        </menu>
+        <VotersTable/>
         {isAdmin && voters.length === 0 && <button className="btn danger full"
                   onClick = {deleteElection}>Delete Election</button> }
         </div>

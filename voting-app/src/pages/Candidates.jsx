@@ -4,6 +4,7 @@ import Candidate from '../components/Candidate';
 import ConfirmVote from '../components/ConfirmVote';
 import { useSelector } from 'react-redux';
 import axios from 'axios';
+import VotersTable from '../components/VotersTable';
 
 const Candidates = () => {
   const navigate = useNavigate();
@@ -99,6 +100,8 @@ const Candidates = () => {
             {candidates.map(candidate => 
             <Candidate key={candidate._id} {...candidate} />)}
           </div>
+          <VotersTable/>
+          
         </>
       }
      
