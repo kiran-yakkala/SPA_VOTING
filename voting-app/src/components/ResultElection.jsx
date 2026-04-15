@@ -4,8 +4,9 @@ import '../index.css';
 import { useEffect } from "react";
 import axios from 'axios';
 import Loader from './Loader';
+import {getOrdinalDate} from '../components/util';
 
-const ResultElection = ({_id : id, thumbnail, title, isClosed}) => {
+const ResultElection = ({_id : id, thumbnail, title, isClosed, noresult, matchdate, matchtimeslot}) => {
 
 const [isLoading, setIsLoading] = React.useState(false)
 const [totalVotes, setTotalVotes] = React.useState(0);
@@ -71,9 +72,11 @@ useEffect(() => {
   return (
     <>
         {isLoading && <Loader/>}
-        <article className={`result ${isClosed ? 'closed' :''}`}>
+        <article className={`result ${isClosed ? 'closed' : noresult ? 'noresult' : ''}`}>
             <header className={`result__header ${isClosed ? 'closed' :''}`}>
                 <h4>{title}</h4>
+                <h4>{getOrdinalDate(matchdate)}</h4>
+                <h4>{matchtimeslot}</h4>
                 <div className="result__header-image">
                     <img src={thumbnail} alt={title} />
                 </div>

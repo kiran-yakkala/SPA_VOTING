@@ -335,6 +335,15 @@ nav {
   flex-direction: column;
 }
 
+.result.noresult{
+  background: var(--color-gray-0);
+  border-radius: var(--radius-4);
+  margin-bottom: 1.5rem;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
 .result__header.closed {
   display: flex;
   align-items: center;
@@ -556,6 +565,7 @@ nav {
   width: 35rem;
   border-radius: var(--radius-5);
   overflow: hidden;
+
 }
 
 .modal__header {
@@ -601,6 +611,30 @@ nav {
 .modal__selection label h6 {
   margin: 0;
   color: var(--color-gray-700);
+}
+
+/* Target all inputs and textareas inside your modals */
+.modal input, 
+.modal textarea, 
+.modal select {
+    background-color: var(--color-bg-variant, #f0f0f0); /* Light gray in light mode, dark in dark mode */
+    color: var(--color-gray-900, #111);                /* Dark text in light mode, white/light text in dark mode */
+    border: 1px solid var(--color-gray-200, #ccc);
+    padding: 10px;
+    border-radius: 4px;
+    width: 100%;
+    outline: none;
+}
+
+/* Fix for the text typed inside the input */
+.modal input:focus {
+    color: var(--color-gray-900);
+    border-color: var(--color-primary);
+}
+
+/* Specifically for dark mode placeholders */
+.modal input::placeholder {
+    color: var(--color-gray-500);
 }
 
 

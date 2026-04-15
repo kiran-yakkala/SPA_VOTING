@@ -106,7 +106,7 @@ const Election = ({ election, isNext }) => {
                     </div>
             )}
             <div className='election__cta'>
-                <Link to={`/elections/${id}`} className='btn sm'>View Votes</Link>
+                {!canVote && <Link to={`/elections/${id}`} className='btn sm'>View Votes</Link>}
                 {!isClosed && <>
                  {canVote ? (
                     <Link to={`/elections/${id}/candidates`} className='btn sm'>
