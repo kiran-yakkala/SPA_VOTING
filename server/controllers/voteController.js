@@ -91,4 +91,43 @@ const getElectionVotes = async (req, res, next) => {
     }
 };
 
-module.exports = {getDetailedVoterHistory, getElectionVotes}
+const cleanupDuplicateVotes = async (req, res, next) => {
+    try {
+        // 1. Find all groups of (voter + election) that have more than 1 vote
+        const duplicates = await VoteModel.aggregate([
+            {
+                $group: {
+                    _id: { voter: "$voter", election: "$election" },
+                    count: { $sum: 1 },
+                    votes: { $push: "$_id" }
+                }
+            },
+            {
+                $match: { count: { $gt: 1 } }
+            }
+        ]);
+
+        let totalDeleted = 0;
+
+        // 2. Iterate through each duplicate group
+        for (const group of duplicates) {
+            // Keep the first vote (earliest), delete the rest
+            const [keep, ...toDelete] = group.votes;
+            
+            const result = await VoteModel.deleteMany({ _id: { $in: toDelete } });
+            totalDeleted += result.deletedCount;
+        }
+
+        // 3. After cleaning, you MUST run your syncHistoricalVoterPoints script
+        // to recalculate the net earnings with the correct vote counts.
+        
+        res.status(200).json({ 
+            message: `Cleanup successful. Removed ${totalDeleted} duplicate votes.`,
+            duplicatesFound: duplicates.length 
+        });
+    } catch (error) {
+        return next(new HttpError("Cleanup failed: " + error.message, 500));
+    }
+};
+
+module.exports = {getDetailedVoterHistory, getElectionVotes, cleanupDuplicateVotes}

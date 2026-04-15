@@ -8,7 +8,8 @@ const voterModel = require('../models/voterModel');
 const voteModel = require('../models/voteModel');
 const counter = require('../models/counter');
 const electionModel = require('../models/electionModel');
-const TeamModel = require('../models/teamModel')
+const TeamModel = require('../models/teamModel');
+const notificationModel = require('../models/notificationModel');
 
 
 /*
@@ -394,6 +395,28 @@ const closeElection = async (req, res, next) => {
         
         console.log("In close election ", id);
         console.log("In close election winnerId ", winnerId);
+
+        // const matchName = existingElection.title;
+        // // Format date to a readable string (e.g., "Apr 15, 2026")
+        // const matchDate = new Date(existingElection.matchdate).toLocaleDateString('en-IN', {
+        //     day: 'numeric',
+        //     month: 'short',
+        //     year: 'numeric'
+        // });
+
+        // const allVotes = await voteModel.find({ election: id });
+        // if (allVotes.length === 0) { /* handle no-participation case */ }
+        // let voterCount = allVotes.length;
+        // if (voterCount !== 6) {
+        //     console.log("allVotes.length is not equal to 6 ", allVotes.length);
+        //     voterCount = 6;
+        // }
+        // const totalPool = allVotes.length * 50;
+        // let winners = [];
+        // let share = 50;
+        // let message = "";
+        // let netEarnings = 0;
+
        let winnerValue = null;
         let noResultValue = false;
 
@@ -410,6 +433,12 @@ const closeElection = async (req, res, next) => {
                     });
                 }
             }
+
+            // NR Logic: Everyone who participated gets 50 points back
+            // winners = allVotes.map(v => v.voter);
+            // netEarnings = share;
+            // message = `Match: ${matchName} (${matchDate}) ended in No Result. 50 points have been refunded.`;
+
         } else if (winnerId) {
             // 2. Identify Winner and Loser Candidates from the election
             const winnerCand = existingElection.candidates.find(c => c._id.toString() === winnerId);
@@ -432,6 +461,22 @@ const closeElection = async (req, res, next) => {
                 });
             }
             winnerValue = winnerId;
+
+             // Winner Logic: Only those who picked the winner split the pool
+            // const winningVotes = allVotes.filter(v => v.candidate.toString() === winnerId);
+            // if (winningVotes.length > 0) {
+            //     console.log("winner updating. length...", winningVotes.length)
+            //     winners = winningVotes.map(v => v.voter);
+            //     // 2. Calculate the total share from the pool
+            //     const totalShare = Math.floor(totalPool / winners.length);
+                
+            //     // 3. Subtract the initial 50 points stake to get net earnings
+            //     netEarnings = totalShare - share; 
+
+            //     // 4. Update the message 
+            //     message = `Congrats! You picked the winner for ${matchName} (${matchDate}). Earned: ${netEarnings} pts (Total Share: ${share} pts).`;
+
+            // }
         }
 
         // 3. Update Election with Winner and NoResult status
@@ -454,8 +499,31 @@ const closeElection = async (req, res, next) => {
             responseData.winningCandidateName = responseData.winner.team.name;
         }
 
-        // 3. Trigger Global Re-ranking
+        // 5. Trigger Global Re-ranking
         await updateGlobalRankings();
+
+        await distributeMatchPoints(id, winnerId);
+
+        //6. Update Points for all winners and add notifications
+        // if (winners.length > 0) {
+        //     // 
+        //     await voterModel.updateMany(
+        //         { _id: { $in: winners } },
+        //         { 
+        //             $inc: { 
+        //                 points: share, 
+        //                 netEarnings: netEarnings 
+        //             } 
+        //         }
+        //     );
+
+            
+        //     const notifications = winners.map(voterId => ({
+        //         voter: voterId,
+        //         message: message
+        //     }));
+        //     await notificationModel.insertMany(notifications);
+        // }
 
         res.status(200).json(responseData);
     } catch (error){
@@ -499,6 +567,121 @@ const updateGlobalRankings = async () => {
     });
 
     await Promise.all(rankUpdates);
+};
+
+const distributeMatchPoints = async (electionId, winnerId) => {
+    try {
+
+        // 1. Fetch Election details to get Name and Date
+        const election = await electionModel.findById(electionId);
+        if (!election) return;
+
+        const matchName = election.title;
+        // Format date to a readable string (e.g., "Apr 15, 2026")
+        const matchDate = new Date(election.matchdate).toLocaleDateString('en-IN', {
+            day: 'numeric',
+            month: 'short',
+            year: 'numeric'
+        });
+
+        // 2. Get all participants
+        const allVotes = await voteModel.find({ election: electionId });
+        if (allVotes.length === 0) return;
+
+        const totalPool = allVotes.length * 50;
+        let winners = [];
+        let share = 50;
+        let netEarnings = 0;
+        let message = "";
+
+        if (winnerId === "NR") {
+            // Split equally (Refund 50 points each)
+            winners = allVotes.map(v => v.voter);
+            netEarnings = share;
+            message = `Match: ${matchName} (${matchDate}) ended in No Result. 50 points have been refunded.`;
+            await voterModel.updateMany(
+                { _id: { $in: winners } },
+                { 
+                    $inc: { 
+                        points: share,     
+                    } 
+                }
+            );
+
+            // 3. Create notifications for all winners/participants
+            const notifications = winners.map(voterId => ({
+                voter: voterId,
+                message: message
+            }));
+            await notificationModel.insertMany(notifications);
+        } else {
+            // Split pool among correct voters
+            const winningVotes = allVotes.filter(v => v.candidate.toString() === winnerId);
+            const losingVotes = allVotes.filter(v => v.candidate.toString() !== winnerId);
+
+            if (winningVotes.length > 0) {
+                winners = winningVotes.map(v => v.voter);
+                // 2. Calculate the total share from the pool
+                const totalShare = Math.floor(totalPool / winners.length);
+                
+                // 3. Subtract the initial 50 points stake to get net earnings
+                
+                netEarnings = totalShare - share; 
+
+                // 4. Enhanced message for Winners
+                message = `Congrats! You picked the winner for ${matchName} (${matchDate}). Earned: ${netEarnings} pts (Total Share: ${share} pts).`;
+
+                await voterModel.updateMany(
+                    { _id: { $in: winners } },
+                    { $inc: { points: share, netEarnings: netEarnings  } }
+                );
+
+                // 3. Create notifications for all winners/participants
+                const notifications = winners.map(voterId => ({
+                    voter: voterId,
+                    message: message
+                }));
+                await notificationModel.insertMany(notifications);
+
+            }
+
+            if (losingVotes.length > 0) {
+                const losers = losingVotes.map(v => v.voter);
+                if(losingVotes.length === allVotes.length) {
+                    netEarnings = 0; 
+                    //  Enhanced message for Losers
+                    message = `Your pick for ${matchName} (${matchDate}) lost. Your profit has decreased by 0 pts.`;
+                } else {
+                    netEarnings = -50; 
+                    //  Enhanced message for Losers
+                    message = `Your pick for ${matchName} (${matchDate}) lost. Your profit has decreased by 50 pts.`;
+                }         
+               
+
+                // Losers get 50 points (refunded to balance) 
+                // BUT we subtract 50 from netShare to record the loss
+                await voterModel.updateMany(
+                    { _id: { $in: losers } },
+                    { 
+                        $inc: { 
+                            points: share,       // Keep the refund if you want them to keep their balance
+                            netEarnings: netEarnings     // Subtract 50 to track the loss
+                        } 
+                    }
+                );
+
+                // 3. Create notifications for all winners/participants
+                const notifications = winners.map(voterId => ({
+                    voter: voterId,
+                    message: message
+                }));
+                await notificationModel.insertMany(notifications);
+            }           
+        }       
+
+    } catch (error) {
+        console.error("Error distributing points:", error);
+    }
 };
 
 const migrateData = async () => {
@@ -570,7 +753,30 @@ const syncHistoricalData = async () => {
     }
 };
 
+const syncHistoricalVoterPoints = async (req, res, next) => {
+    try {
+        // 1. Reset everyone to 0
+        await voterModel.updateMany({}, { points: 0, netEarnings: 0 });
+
+        // 2. Delete ALL existing notifications to start fresh
+        await notificationModel.deleteMany({});
+        console.log("Existing notifications cleared.");
+
+        // 2. Fetch all closed elections
+        const elections = await electionModel.find({ isClosed: true });
+
+        for (const election of elections) {
+            // Reuse the helper logic for each match
+            await distributeMatchPoints(election._id, election.winner ? election.winner.toString() : "NR");
+        }
+
+        res.status(200).json({ message: "Voter points and netShare synced with historical results." });
+    } catch (error) {
+        return next(new HttpError("Sync failed: " + error.message, 500));
+    }
+};
+
 
 module.exports = {getElection, getElections, addElection, updateElection, 
     removeElection, getElectionCandidates, getElectionVoters, getElectionsForIds,
-    getElectionCandidatesWithVotes, closeElection, migrateData, syncHistoricalData}
+    getElectionCandidatesWithVotes, closeElection, migrateData, syncHistoricalData, syncHistoricalVoterPoints}
