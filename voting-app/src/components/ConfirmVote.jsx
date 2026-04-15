@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom';
 
 const ConfirmVote = (selectedElection) => {
     const [modalCandidate, setModalCandidate] = useState({});
+    const [isVoting, setIsVoting] = useState(false); // Add this state
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -34,6 +35,10 @@ const ConfirmVote = (selectedElection) => {
 
     // confirm vote for selected candidate
     const confirmVote = async () => {
+        console.log("is voting flag... ", isVoting)
+        if (isVoting) return; // Prevent execution if already voting
+        
+        setIsVoting(true); // Disable button immediately
          try{
             const savedToken = localStorage.getItem("token")
             console.log("In confirmVote ", selectedVoteCandidate)
@@ -49,6 +54,7 @@ const ConfirmVote = (selectedElection) => {
             navigate('/congrats')
         } catch(error){
             console.log(error)
+            setIsVoting(false); // Re-enable only if there's an error
         }
 
         closeCandidateModal()
@@ -71,7 +77,7 @@ const ConfirmVote = (selectedElection) => {
                  <p>{modalCandidate.motto?.length > 45 ? `${modalCandidate.motto.substring(0, 45)}...` : modalCandidate.motto}</p>
                  <div className="confirm__vote-cta">
                     <button className="btn" onClick={closeCandidateModal}>Cancel</button>
-                    <button className="btn primary" onClick={confirmVote}>Confirm</button>
+                    <button className="btn primary" onClick={confirmVote} disabled={isVoting}>Confirm</button>
                  </div>
                  
             

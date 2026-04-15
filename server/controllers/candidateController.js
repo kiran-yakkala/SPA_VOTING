@@ -204,6 +204,14 @@ const updateCandidate = async (req, res, next) => {
         const {id: candidateId} = req.params;  
         console.log("in update candidate req.user", req.user)
         const {electionId: selectedElection} = req.body;
+
+        const voter = await voterModel.findById(req.user.id);
+
+    // Check if electionId is already in the user's votedElections array
+    if (voter.votedElections.includes(selectedElection)) {
+        console.log("in update candidate - already voted for this match")
+        return res.status(201).json(voter.votedElections); 
+    }
         
         // get the candidate
         let currentCandidate =  await CandidateModel.findById(candidateId);
@@ -216,13 +224,11 @@ const updateCandidate = async (req, res, next) => {
         const sess = await mongoose.startSession();
         sess.startTransaction();
 
-        let voter = await voterModel.findById(req.user.id)
-        console.log("in update candidate 5.1", voter)
         await voter.save({session:sess})
-              console.log("in update candidate - selectedElection", selectedElection)
-console.log("Type of selectedElection:", typeof selectedElection);
+             
+        
         let election = await ElectionModel.findById(selectedElection);
-        console.log("in update candidate 5.2", election)
+        
         election.voters.push(voter);
        
         voter.votedElections.push(election);
