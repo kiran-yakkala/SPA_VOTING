@@ -103,10 +103,10 @@ const loginVoter = async (req, res, next) => {
         }
 
         // generate token
-        const {id: id, isAdmin, votedElections, fullName, emaila} = voter;
+        const {id: id, isAdmin, votedElections, fullName, emaila, points, netEarnings} = voter;
         const token = generateToken({id, isAdmin})
 
-        res.status(201).json({token, id, votedElections, isAdmin, fullName, email})
+        res.status(201).json({token, id, votedElections, isAdmin, fullName, email, points, netEarnings})
     } catch(error) {
         console.log("In error ", error.message)
         return next(new HttpError("Login failed. Please check credentials or try agian later.", 422))

@@ -1389,6 +1389,16 @@ tr.row-lost td {
     color: var(--color-gray-700);
 }
 
+.profile__value.positive {
+    color:  #0a851a; /* Green */
+    font-weight: bold;
+}
+
+.profile__value.negative {
+    color: #ff4d4d; /* High-contrast red for losses */
+    font-weight: bold;
+}
+
 /* Badge for Admin/Voter status */
 .profile__badge {
     padding: 0.4rem 1rem;

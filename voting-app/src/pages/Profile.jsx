@@ -8,6 +8,7 @@ const Profile = () => {
      const[showNav, setShowNav] = useState(window.innerWidth < 600 ? false : true);
      const currentVoter = useSelector(state => state?.vote?.currentVoter)
      const [votedElections, setVotedElections] = useState([]);
+     const [totalWins, setTotalWins] = useState([]);
 
      // check if voter has already voted
   const getVotedElections = async() => {
@@ -18,9 +19,11 @@ const Profile = () => {
 
       const response = await axios.get(`${process.env.REACT_APP_API_URL}/votes/${id}`,
               {withCredentials: true, headers:{Authorization: `Bearer ${token}`}})
-      const votedElections = await response.data;
+     // Destructure the new object format { history, totalWins }
+        const { history: votedElections, totalWins: winsCount } = await response.data;
       setVotedElections(votedElections);
-      console.log("votedElections...", votedElections)
+      setTotalWins(winsCount);
+       console.log("Total Wins:", winsCount);
     } catch(error){
       console.log(error)
     }
@@ -50,6 +53,16 @@ const Profile = () => {
                     <span className="profile__label">Account Type:</span>
                     <span className={`profile__badge ${currentVoter.isAdmin ? 'admin' : 'voter'}`}>
                         {currentVoter.isAdmin ? "Administrator" : "Standard Voter"}
+                    </span>
+                </div>
+                <div className="profile__item">
+                    <span className="profile__label">Total Wins:</span>
+                    <span className="profile__value">{totalWins}</span>
+                </div>
+                 <div className="profile__item">
+                    <span className="profile__label">Net points earned:</span>
+                    <span className={`profile__value ${currentVoter.netEarnings < 0 ? 'negative' : 'positive'}`}>
+                        {currentVoter.netEarnings}/{currentVoter.points}
                     </span>
                 </div>
             </div>

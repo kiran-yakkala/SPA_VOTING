@@ -27,6 +27,15 @@ const getDetailedVoterHistory = async (req, res, next) => {
             .sort({ createdAt: -1 })
             .lean(); // Use lean to get plain JavaScript objects for easier modification
 
+            // 2. Calculate total wins from the fetched history
+        // A win is defined as: candidate._id matches election.winner
+        const totalWins = votes.filter(vote => 
+            vote.election && 
+            vote.candidate && 
+            vote.election.winner &&
+            vote.election.winner.toString() === vote.candidate._id.toString()
+        ).length;
+
         // 2. Flatten the data so 'fullName' comes from 'team.name'
         const formattedVotes = votes.map(vote => {
             if (vote.candidate && vote.candidate.team) {
@@ -42,7 +51,10 @@ const getDetailedVoterHistory = async (req, res, next) => {
             return vote;
         });
 
-        res.status(200).json(formattedVotes);
+        res.status(200).json({
+            history: formattedVotes,
+            totalWins: totalWins
+        });
     } catch (error) {
         return next(new HttpError("Could not fetch voting details", 500));
     }
