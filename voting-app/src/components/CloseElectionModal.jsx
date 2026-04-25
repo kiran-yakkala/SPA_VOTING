@@ -61,6 +61,11 @@ const CloseElectionModal = () => {
 
     const closeElection =  async(e) => {
         e.preventDefault();
+        //Validate that a winner has actually been selected
+        if (!winnerId || winnerId === "") {
+            alert("Please select a candidate before submitting.");
+            return; // Stop the function here
+        }
         try {
             const savedToken = localStorage.getItem("token")
            
@@ -121,7 +126,7 @@ const CloseElectionModal = () => {
                     </div>
                 </div>
                         
-                <button type="submit" className="btn primary modal__submit-btn" onClick={closeElection}> Submit </button>
+                <button type="submit" className="btn primary modal__submit-btn"  disabled={!winnerId} onClick={closeElection}> Submit </button>
                 
             </div>
         </section>
