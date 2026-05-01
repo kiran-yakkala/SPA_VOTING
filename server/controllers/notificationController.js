@@ -12,7 +12,6 @@ const getNotifications = async (req, res, next) => {
          console.log("in get all notifications ")        
         const notifications = await notificationModel.find({ voter: req.user.id })
             .sort({ createdAt: -1 })
-            .limit(20);
         console.log("notification list ", notifications)
         res.status(200).json(notifications);
     } catch(error) {

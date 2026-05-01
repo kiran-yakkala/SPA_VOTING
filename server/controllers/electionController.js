@@ -671,7 +671,7 @@ const distributeMatchPoints = async (electionId, winnerId) => {
                 );
 
                 // 3. Create notifications for all winners/participants
-                const notifications = winners.map(voterId => ({
+                const notifications = losers.map(voterId => ({
                     voter: voterId,
                     message: message
                 }));

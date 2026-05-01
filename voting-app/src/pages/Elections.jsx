@@ -33,7 +33,6 @@ const getSortableDate = (match) => {
 
     // 1. Get ONLY the date part: "2026-04-03"
     const datePart = match.matchdate.split('T')[0];
-    console.log("match date..", datePart)
 
     // 2. Extract time from: "Evening (07:30 PM)" -> "07:30 PM"
     const timeMatch = match.matchtimeslot.match(/\((.*?)\)/);
@@ -51,7 +50,23 @@ const ongoingElections = elections
     .filter(election => !election.isClosed)
     .sort((a, b) => getSortableDate(a) - getSortableDate(b));
 
-const nextMatchId = ongoingElections[0]?._id;
+// Helper to check if a specific date is today in local time
+const isDateToday = (dateString) => {
+    if (!dateString) return false;
+    const today = new Date().toLocaleDateString('en-CA'); // YYYY-MM-DD local
+    const matchDay = new Date(dateString).toISOString().split('T')[0];
+    return today === matchDay;
+};
+
+// Logic to determine "Next Match" ID
+// If the first match is NOT today, it is the 'Next' match.
+// If the first match IS today, then the second match (if it exists) is 'Next'.
+const firstMatch = ongoingElections[0];
+const secondMatch = ongoingElections[1];
+
+const nextMatchId = (firstMatch && !isDateToday(firstMatch.matchdate)) 
+    ? firstMatch._id 
+    : secondMatch?._id;
 
 // 2. Sort Closed Matches (Most recent first)
 const closedElections = elections

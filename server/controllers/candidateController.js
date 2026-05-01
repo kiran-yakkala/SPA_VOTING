@@ -197,7 +197,7 @@ const removeCandidate = async (req, res, next) => {
 * PATCH : api/candidates
 
 */
-const updateCandidate = async (req, res, next) => {
+const updateCandidate1 = async (req, res, next) => {
     try {
         
         console.log("in update candidate")
@@ -253,5 +253,69 @@ console.log("in update candidate last", voter.votedElections)
         return next(new HttpError("Could not update candidate", 404))
     }
 }
+
+const updateCandidate = async (req, res, next) => {
+    const sess = await mongoose.startSession();
+    sess.startTransaction();
+
+    try {
+        const { id: candidateId } = req.params;  
+        const { electionId: selectedElection } = req.body;
+        const voter = await voterModel.findById(req.user.id);
+
+        // 1. Check if this is a "Change Vote" scenario
+        if (voter.votedElections.includes(selectedElection)) {
+            // Find the existing vote for this voter and election
+            const existingVote = await voteModel.findOne({ 
+                voter: voter._id, 
+                election: selectedElection 
+            }).session(sess);
+
+            if (existingVote) {
+                // Decrement voteCount from the PREVIOUS candidate
+                await CandidateModel.findByIdAndUpdate(
+                    existingVote.candidate, 
+                    { $inc: { voteCount: -1 } }
+                ).session(sess);
+
+                // Remove the old vote record
+                await voteModel.deleteOne({ _id: existingVote._id }).session(sess);
+            }
+        } else {
+            // If it's a first-time vote, update the Voter and Election relationships
+            const election = await ElectionModel.findById(selectedElection);
+            election.voters.push(voter);
+            voter.votedElections.push(election);
+            
+            await election.save({ session: sess });
+            await voter.save({ session: sess });
+        }
+
+        // 2. Increment voteCount for the NEW candidate
+        const currentCandidate = await CandidateModel.findByIdAndUpdate(
+            candidateId, 
+            { $inc: { voteCount: 1 } }, 
+            { new: true, session: sess }
+        );
+
+        // 3. Create the new vote record
+        const newVote = new voteModel({
+            voter: voter._id,
+            candidate: currentCandidate._id,
+            election: selectedElection
+        });
+        await newVote.save({ session: sess });
+
+        await sess.commitTransaction();
+        sess.endSession();
+
+        res.status(201).json(voter.votedElections);
+    } catch (error) {
+        await sess.abortTransaction();
+        sess.endSession();
+        console.log("Error: ", error.message);
+        return next(new HttpError("Could not update candidate", 500));
+    }
+};
 
 module.exports = {addCandidate, getCandidate, getCandidates, removeCandidate, updateCandidate}

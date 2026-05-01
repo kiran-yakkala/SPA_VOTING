@@ -61,7 +61,7 @@ useEffect(() =>{
       <section className='elections'>
       <div className='container elections__container'>
         <header className='elections__header'>
-          <h1>Teams</h1>
+          <h1>Teams LeaderBoard</h1>
           {isAdmin && <button className='btn primary' 
                               onClick={openModal}>Add Team</button>}
         </header>

@@ -869,12 +869,6 @@ nav {
     scroll-behavior: auto; /* Disables smooth scroll for better performance while dragging */
 }
 
-.election {
-    min-width: 320px;
-    flex-shrink: 0;
-    pointer-events: none; /* Prevents card links from firing accidentally during drag */
-}
-
 /* Re-enable pointer events for specific buttons inside the card if needed */
 .election__cta a, .election__cta button {
     pointer-events: auto;
@@ -992,16 +986,6 @@ nav {
     filter: grayscale(30%);
 }
 
-/* .election {
-  min-width: 320px;        
-  flex-shrink: 0;          
-  scroll-snap-align: start; 
-  background: var(--color-gray-0);
-  border-radius: var(--radius-5);
-  box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.1);
-  display: flex;
-  flex-direction: column;
-} */
 
 /* Ensure the image stays a consistent size in the card */
 .election__image img {
@@ -1009,10 +993,6 @@ nav {
   height: 180px;
   object-fit: cover;
 }
-
-/* .election__image {
-  max-height: 13rem;
-} */
 
 .election_hover {
   box-shadow: 0 0.8rem 0.8rem rgba(0,0,0,0.1);
@@ -1082,11 +1062,65 @@ nav {
     border: 1px solid rgba(205, 60, 60, 0.852);
 }
 
-/* The Glow and Pulse Animation */
+/* Base Card Style (shared) */
+.election {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: 1px solid #e2e8f0;
+}
+
+/* Today's Match Card */
+.election--today {
+    border: 2px solid #e11d48; /* Red border */
+    background-color: #fff1f2; /* Subtle red tint */
+    transform: scale(1.02);
+    box-shadow: 0 10px 25px -5px rgba(225, 29, 72, 0.2);
+}
+
+/* Next Match Card */
+.election--next {
+    border: 2px solid #007bff; /* Blue border */
+    background-color: #f0f7ff; /* Subtle blue tint */
+}
+
+/* Specific Badge Styling */
+.match-badge {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    padding: 4px 10px;
+    border-radius: 4px;
+    font-weight: 800;
+    text-transform: uppercase;
+    font-size: 0.65rem;
+    z-index: 5;
+    color: white;
+}
+
+.today-badge {
+    background-color: #e11d48;
+}
+
+.next-badge {
+    background-color: #007bff;
+}
+
+/* Animation for the Today Badge */
 .glow-animation {
+    box-shadow: 0 0 12px rgba(225, 29, 72, 0.6);
+    animation: pulse-red 2s infinite;
+}
+
+@keyframes pulse-red {
+    0% { opacity: 1; }
+    50% { opacity: 0.7; }
+    100% { opacity: 1; }
+}
+
+/* The Glow and Pulse Animation */
+/* .glow-animation {
     box-shadow: 0 0 15px var(--color-primary);
     animation: pulse-glow 2s infinite;
-}
+} */
 
 @keyframes pulse-glow {
     0% {
@@ -1561,6 +1595,43 @@ tr.row-lost td {
     border-bottom: 1px solid #eee;
 }
 
+/* Apply to the top 4 row to indicate qualification */
+.points-table tbody tr:nth-of-type(-n+4) {
+    color: #007bff; /* Blue text for the 4th row */ 
+    font-weight: 700;
+}
+
+
+.voters-points-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--color-gray-0);
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+.voters-points-table th {
+    background-color: var(--color-gray-900);
+    color: var(--color-gray-0);
+    padding: 12px;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+}
+
+.voters-points-table td {
+    padding: 15px 10px;
+    text-align: center;
+    border-bottom: 1px solid #eee;
+}
+
+
+
+/* Ensure borders show up correctly on table rows */
+table {
+    border-collapse: collapse;
+}
+
 /* Team Section */
 .team-cell {
     display: flex;
@@ -1603,9 +1674,60 @@ tr.row-lost td {
 .L { background-color: #dc3545; } /* Loss - Red */
 .NR { background-color: #6c757d; } /* NR - Gray */
 
+.form-cell .form-dot:first-child {
+   border: 2px solid var(--color-gray-900); /* Adds a clear outline */
+    transform: scale(1.15); /* Makes it slightly larger */
+    box-shadow: 0 0 5px rgba(0,0,0,0.2); /* Adds depth */
+    margin-right: 4px; /* Optional: adds space between it and the rest */
+}
+
 .points-cell {
     font-weight: 800;
-    color: #2196f3;
+
+}
+
+/* .countdown-text {
+    display: block;
+    font-size: 0.7rem;
+    color: #dc3545;
+    font-weight: bold;
+    margin-bottom: 5px;
+} */
+
+.countdown-text {
+    display: block;
+    color: #6b7280; /* Neutral gray for standard countdown */
+    margin-bottom: 5px;
+    font-weight: 800;
+    font-size: 0.8rem;
+}
+
+
+@keyframes flash {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
+.countdown-urgent {
+    color: #e18f1d !important; 
+    font-weight: 800;
+    font-size: 0.8rem;
+}
+
+/* Optional: Make it pulse faster if under 1 hour */
+.final-call-style {
+    color: #e11d48 !important;
+    animation: rapid-flash 0.5s infinite;
+    background: #ffe4ec; /* Light pink background to highlight */
+    padding: 2px 5px;
+    border-radius: 4px;
+    font-weight: 800;
+    font-size: 0.8rem;
+}
+
+@keyframes rapid-flash {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.8; transform: scale(1.02); }
 }
 
 

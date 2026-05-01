@@ -69,7 +69,7 @@ const Candidates = () => {
     <>
       <section className="candidates">
 
-      {!canVote ? 
+      {!true ? 
         <header className="candidates__header">
         
           <h1>Already Voted</h1>

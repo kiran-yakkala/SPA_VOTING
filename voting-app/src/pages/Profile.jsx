@@ -29,6 +29,18 @@ const Profile = () => {
     }
   }
 
+  const showVoterLog = () => {
+    // You can replace this with a more complex UI or a Toast library
+    const summary = `
+        ✅ Correct Votes: +${currentVoter.correctVotes} pts
+        ❌ Incorrect Votes: ${currentVoter.penalties} pts
+        ⭐ Loyalty Bonus: +${currentVoter.loyaltyPoints} pts
+        ---------------------------
+        Net Total: ${currentVoter.netEarnings}
+    `;
+    alert(summary); // Using alert for simplicity, or use a custom toast below
+};
+
   useEffect(() => {
     getVotedElections();
   },[])
@@ -61,7 +73,11 @@ const Profile = () => {
                 </div>
                  <div className="profile__item">
                     <span className="profile__label">Net points earned:</span>
-                    <span className={`profile__value ${currentVoter.netEarnings < 0 ? 'negative' : 'positive'}`}>
+                    <span 
+                        className={`profile__value clickable ${currentVoter.netEarnings < 0 ? 'negative' : 'positive'}`}
+                        onClick={showVoterLog}
+                        title="Click to see breakdown"
+                    >
                         {currentVoter.netEarnings}/{currentVoter.points}
                     </span>
                 </div>

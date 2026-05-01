@@ -36,7 +36,7 @@ const ConfirmVote = (selectedElection) => {
     // confirm vote for selected candidate
     const confirmVote = async () => {
         console.log("is voting flag... ", isVoting)
-        if (isVoting) return; // Prevent execution if already voting
+       // if (isVoting) return; // Prevent execution if already voting
         
         setIsVoting(true); // Disable button immediately
          try{
@@ -51,6 +51,7 @@ const ConfirmVote = (selectedElection) => {
                             {withCredentials: true, headers:{Authorization: `Bearer ${savedToken}`}})
             const voteResult = await response.data;
             dispatch(voteActions.changeCurrentVoter({...currentVoter, votedElections: voteResult}))
+            setIsVoting(false);
             navigate('/congrats')
         } catch(error){
             console.log(error)

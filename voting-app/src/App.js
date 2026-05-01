@@ -11,6 +11,7 @@ import Candidates from './pages/Candidates';
 import Register from './pages/Register';
 import Profile from './pages/Profile';
 import Teams from './pages/Teams';
+import Voters from './pages/Voters';
 
 //https://www.youtube.com/watch?v=lwVdmLP3Fh0
 const router = createBrowserRouter([
@@ -58,6 +59,10 @@ const router = createBrowserRouter([
         {
           path : "teams",
           element : <Teams/>
+        },
+        {
+          path : "voters",
+          element : <Voters/>
         }
     ]
   }
