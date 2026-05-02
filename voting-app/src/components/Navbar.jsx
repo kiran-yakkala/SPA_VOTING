@@ -50,7 +50,7 @@ useEffect(() => {
             <div>
                 {token && showNav && 
                 <menu>
-                    <NavLink to="/voters" onClick={closeNavMenu}>Vote Points</NavLink>
+                    <NavLink to="/voters" onClick={closeNavMenu}>Points History</NavLink>
                     <NavLink to="/teams" onClick={closeNavMenu}>Teams</NavLink>
                     <NavLink to="/elections" onClick={closeNavMenu}>Matches</NavLink>
                     <NavLink to="/results" onClick={closeNavMenu}>Results</NavLink>

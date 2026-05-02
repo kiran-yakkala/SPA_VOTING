@@ -6,7 +6,7 @@ const {getElection, getElections, addElection, updateElection,
     getElectionCandidatesWithVotes, closeElection, migrateData, syncHistoricalData, syncHistoricalVoterPoints} = require("../controllers/electionController")
 const {addCandidate, getCandidate, getCandidates, removeCandidate, updateCandidate} = require("../controllers/candidateController")
 const {addTeam, getTeam, getTeams, removeTeam, updateTeam} = require("../controllers/teamController")
-const {getNotifications, updateNotifications} = require("../controllers/notificationController")
+const {getNotifications, getNotificationsForVoter, updateNotifications} = require("../controllers/notificationController")
 const router = Router()
 const authMiddleware = require("../middleware/authMiddleware")
 
@@ -56,6 +56,7 @@ router.post('/syncHistoricalVoterPoints', authMiddleware, syncHistoricalVoterPoi
 
 
 router.get('/notifications', authMiddleware, getNotifications)
+router.get('/notifications/:id', authMiddleware, getNotificationsForVoter);
 router.patch('/notifications/readAll', authMiddleware, updateNotifications)
 
 module.exports = router;

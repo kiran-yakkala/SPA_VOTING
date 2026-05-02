@@ -573,7 +573,13 @@ const distributeMatchPoints = async (electionId, winnerId) => {
     try {
 
         // 1. Fetch Election details to get Name and Date
-        const election = await electionModel.findById(electionId);
+        const election = await electionModel.findById(electionId).populate({
+            path: 'candidates',
+            populate: {
+                path: 'team'  // This matches your Team model name
+            }
+        });
+
         if (!election) return;
 
         const matchName = election.title;
@@ -583,6 +589,15 @@ const distributeMatchPoints = async (electionId, winnerId) => {
             month: 'short',
             year: 'numeric'
         });
+
+         // ---  Find the Winner Team Name ---
+        let winnerTeamName = "N/A";
+        if (winnerId !== "NR") {
+            const winnerObj = election.candidates.find(c => c._id.toString() === winnerId.toString());
+            console.log("winner id", winnerObj.team.name);
+            winnerTeamName = winnerObj?.team?.name || "N/A";
+            console.log("winnerTeamName", winnerTeamName);
+        }
 
         // 2. Get all participants
         const allVotes = await voteModel.find({ election: electionId });
@@ -629,7 +644,7 @@ const distributeMatchPoints = async (electionId, winnerId) => {
                 netEarnings = totalShare - share; 
 
                 // 4. Enhanced message for Winners
-                message = `Congrats! You picked the winner for ${matchName} (${matchDate}). Earned: ${netEarnings} pts (Total Share: ${share} pts).`;
+                message = `Congrats! You picked the winner ${winnerTeamName} for ${matchName} (${matchDate}). Earned: ${netEarnings} pts (Total Share: ${share} pts).`;
 
                 await voterModel.updateMany(
                     { _id: { $in: winners } },
@@ -650,11 +665,11 @@ const distributeMatchPoints = async (electionId, winnerId) => {
                 if(losingVotes.length === allVotes.length) {
                     netEarnings = 0; 
                     //  Enhanced message for Losers
-                    message = `Your pick for ${matchName} (${matchDate}) lost. Your profit has decreased by 0 pts.`;
+                    message = `Your did not pick the winner ${winnerTeamName} for ${matchName} (${matchDate}) and lost. Your profit has decreased by 0 pts.`;
                 } else {
                     netEarnings = -50; 
                     //  Enhanced message for Losers
-                    message = `Your pick for ${matchName} (${matchDate}) lost. Your profit has decreased by 50 pts.`;
+                    message = `Your did not pick the winner ${winnerTeamName} for ${matchName} (${matchDate}) and lost. Your profit has decreased by 50 pts.`;
                 }         
                
 

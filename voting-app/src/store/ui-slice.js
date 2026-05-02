@@ -7,7 +7,8 @@ const initialState = {
   updateElectionModalShowing: false,
   closeElectionModalShowing:false,
   teamModalShowing: false,
-  updateTeamModalShowing: false
+  updateTeamModalShowing: false,
+  pointsTableModalShowing: false
 };
 
 const uiSlice = createSlice({
@@ -56,6 +57,12 @@ const uiSlice = createSlice({
     closeUpdateTeamModal(state) {
       state.updateTeamModalShowing = false;
     },
+    openPointsTableModal(state) {
+      state.pointsTableModalShowing = true;
+    },
+    closePointsTableModal(state) {
+      state.pointsTableModalShowing = false;
+    }
   }
 });
 

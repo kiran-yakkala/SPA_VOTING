@@ -216,16 +216,16 @@ console.log("is next... ", isNext);
                     )}
 
                      {isVotingOpen ? (
-                /* TIMER IS OPEN: Voter can Vote or Change Vote */
-                <Link to={`/elections/${id}/candidates`} className='btn sm'>
-                    {canVote ? "Vote Match" : "Change Vote"}
-                </Link>
-            ) : (
-                /* TIMER IS CLOSED: No more voting for regular users */
-                <>
-                        <button className="btn sm btn-disabled" disabled>Voting Closed</button>
-                </>
-            )}
+                            /* TIMER IS OPEN: Voter can Vote or Change Vote */
+                            <Link to={`/elections/${id}/candidates`} className='btn sm'>
+                                {canVote ? "Vote Match" : "Change Vote"}
+                            </Link>
+                        ) : (
+                            /* TIMER IS CLOSED: No more voting for regular users */
+                            <>
+                                    <button className="btn sm btn-disabled" disabled>Voting Closed</button>
+                            </>
+                        )}
                   {isAdmin && <button className='btn sm primary' onClick={openCloseElectionModal}>Close Match</button>}
                   {isAdmin && <button className='btn sm primary' onClick={openModal}>Edit</button>}
                 </>}

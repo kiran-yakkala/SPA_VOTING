@@ -1625,7 +1625,54 @@ tr.row-lost td {
     border-bottom: 1px solid #eee;
 }
 
+/* Styling for positive points */
+.points-positive {
+    color: #2ecc71; /* Green */
+    font-weight: bold;
+}
 
+/* Styling for negative points (minus sign removed via JS) */
+.points-negative {
+    color: #e74c3c; /* Red */    
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-weight: bold;
+}
+
+/* Styling for Winning Notifications */
+.history-win {
+    color: #2e7d32; /* Darker Green for readability */    
+    border-left: 5px solid #2e7d32;
+    padding: 12px;
+}
+
+/* Styling for Loss Notifications (Minus removed) */
+.history-loss {
+    color: #d32f2f; /* Darker Red */    
+    border-left: 5px solid #d32f2f;
+    padding: 12px;
+}
+
+.status-indicator {
+    margin-right: 10px;
+    font-size: 1.2rem;
+}
+
+/* Table Layout */
+
+.match-info { display: flex; flex-direction: column; }
+.match-info small { color: #666; font-size: 0.85rem; }
+
+/* Status Colors */
+.text-red { color: #d32f2f; font-weight: bold; }
+.text-green { color: #2e7d32; font-weight: bold; }
+
+/* Highlight Cells */
+.points-cell { font-weight: bold; padding: 8px; border-radius: 4px; text-align: center; }
+.bg-red { background-color: #ffebee; color: #d32f2f; }
+.bg-green { background-color: #e8f5e9; color: #2e7d32; }
+
+.cell-center { text-align: center; font-weight: bold; color: #555; }
 
 /* Ensure borders show up correctly on table rows */
 table {

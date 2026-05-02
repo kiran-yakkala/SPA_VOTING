@@ -1,14 +1,19 @@
 import React, { useEffect, useState } from 'react'; 
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import {getOrdinalDateTime} from '../components/util'
+import {uiActions} from '../store/ui-slice';
+import PointsTableModal from '../components/PointsTableModal';
 
 const Profile = () => {
      const[showNav, setShowNav] = useState(window.innerWidth < 600 ? false : true);
      const currentVoter = useSelector(state => state?.vote?.currentVoter)
      const [votedElections, setVotedElections] = useState([]);
      const [totalWins, setTotalWins] = useState([]);
+     const dispatch = useDispatch();
+     const pointsTableModalShowing = useSelector(state => state.ui.pointsTableModalShowing);
+         
 
      // check if voter has already voted
   const getVotedElections = async() => {
@@ -29,23 +34,18 @@ const Profile = () => {
     }
   }
 
-  const showVoterLog = () => {
-    // You can replace this with a more complex UI or a Toast library
-    const summary = `
-        ✅ Correct Votes: +${currentVoter.correctVotes} pts
-        ❌ Incorrect Votes: ${currentVoter.penalties} pts
-        ⭐ Loyalty Bonus: +${currentVoter.loyaltyPoints} pts
-        ---------------------------
-        Net Total: ${currentVoter.netEarnings}
-    `;
-    alert(summary); // Using alert for simplicity, or use a custom toast below
-};
+   // Open update election modal
+      const openPointsTableModal = () => {
+          dispatch(uiActions.openPointsTableModal())
+      }
+
 
   useEffect(() => {
     getVotedElections();
   },[])
  
      return (
+        <>
         <section className="profile">
             <div className="container profile__container">
             <header className="profile__header">
@@ -75,10 +75,10 @@ const Profile = () => {
                     <span className="profile__label">Net points earned:</span>
                     <span 
                         className={`profile__value clickable ${currentVoter.netEarnings < 0 ? 'negative' : 'positive'}`}
-                        onClick={showVoterLog}
-                        title="Click to see breakdown"
+                        title="Click to see points leaderboard"
                     >
-                        {currentVoter.netEarnings}/{currentVoter.points}
+                        <button className='btn ' onClick={openPointsTableModal}>{currentVoter.netEarnings}/{currentVoter.points}</button>
+                        
                     </span>
                 </div>
             </div>
@@ -146,6 +146,8 @@ const Profile = () => {
           </div>
         </div>      
     </section>
+    {pointsTableModalShowing && <PointsTableModal/>}
+    </>
      )
 };
 
