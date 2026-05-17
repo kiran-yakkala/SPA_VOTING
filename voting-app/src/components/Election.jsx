@@ -138,8 +138,8 @@ console.log("is next... ", isNext);
           const matchDateTimeStr = `${matchDate.split('T')[0]} ${timePart}`;
           const matchDateTime = new Date(matchDateTimeStr);
 
-          // Cutoff is 30 minutes before match start
-          const cutoffTime = new Date(matchDateTime.getTime() - 30 * 60000);
+          // Cutoff is 5 minutes before match start
+          const cutoffTime = new Date(matchDateTime.getTime() - 5 * 60000);
           
           return new Date() < cutoffTime; // Returns true if voting is still allowed
       } catch (e) {
@@ -158,8 +158,8 @@ console.log("is next... ", isNext);
         // Construct a full date string: "2026-03-28 07:30 PM"
         const matchDateTime = new Date(`${dateStr} ${timePart[1]}`);
         
-        // Return the cutoff time (30 mins before)
-        return new Date(matchDateTime.getTime() - 30 * 60000);
+        // Return the cutoff time (5 mins before)
+        return new Date(matchDateTime.getTime() - 5 * 60000);
     } catch (e) {
         return null;
     }

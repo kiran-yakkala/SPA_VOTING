@@ -17,7 +17,8 @@ const AddElectionModal = () => {
     const [team1, setTeam1] = useState("");
     const [team2, setTeam2] = useState("");
     const [teams, setTeams] = useState([]);
-    const [error, setError] = useState("")
+    const [error, setError] = useState("");
+    const [stage, setStage] = useState("")
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -60,6 +61,7 @@ const AddElectionModal = () => {
             electionData.set('thumbnail', thumbnail)
             electionData.set('matchdate', matchdate);
             electionData.set('matchtimeslot', matchtimeslot);
+            electionData.set('stage', stage);
             electionData.append('teams', JSON.stringify([team1, team2])); 
                
             console.log("formdata entries:", [...electionData.entries()]);
@@ -103,6 +105,20 @@ const AddElectionModal = () => {
                         <input type="text" value= {description} 
                             onChange={e => setDescription(e.target.value)} 
                             name="description"/>
+                    </div>
+                    <div className="form__group-inline">
+                        <h6>Stage:</h6>
+                        <select 
+                                value={stage} 
+                                onChange={e => setStage(e.target.value)} 
+                                name="stage" 
+                                required >
+                                <option value="">-- Choose Stage --</option>
+                                <option value="Eliminator">Eliminator</option>
+                                <option value="Qualifier">Qualifier</option>
+                                <option value="Final">Final</option>
+                                <option value="League">League</option>
+                            </select>
                     </div>
                     
                         <div className="form__group-inline">

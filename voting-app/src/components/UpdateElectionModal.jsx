@@ -14,6 +14,7 @@ const UpdateElectionModal = () => {
     const [winnerId, setWinnerId] = useState("")
     const [matchdate, setMatchdate] = useState("")
     const [matchtimeslot, setMatchtimeslot] = useState("")
+    const [stage, setStage] = useState("")
     const [electionCandidates, setElectionCandidates] = useState([])
     const idOfElectionToUpdate = useSelector(state => state?.vote?.idOfElectionToUpdate)
     const dispatch = useDispatch();
@@ -43,6 +44,7 @@ const UpdateElectionModal = () => {
             setIsClosed(electionData.isClosed)
             setMatchdate(electionData.matchdate)
             setMatchtimeslot(electionData.matchtimeslot)
+            setStage(electionData.stage)
 console.log("electionData in update electionmodel", electionData)
              console.log("isClosed in update electionmodel", isClosed)
 
@@ -78,6 +80,7 @@ console.log("electionData in update electionmodel", electionData)
             electionData.set('description', description)
             electionData.set('matchdate', matchdate)
             electionData.set('matchtimeslot', matchtimeslot)
+            electionData.set('stage', stage)
             if(thumbnail){
                  electionData.set('thumbnail', thumbnail)     
             }
@@ -130,6 +133,20 @@ console.log("electionData in update electionmodel", electionData)
                         <input type="text" value= {description} 
                             onChange={e => setDescription(e.target.value)} 
                             name="description"/>
+                    </div>
+                    <div>
+                        <h6>Stage:</h6>
+                        <select 
+                                value={stage} 
+                                onChange={e => setStage(e.target.value)} 
+                                name="stage" 
+                                required >
+                                <option value="">-- Choose Stage --</option>
+                                <option value="Eliminator">Eliminator</option>
+                                <option value="Qualifier">Qualifier</option>
+                                <option value="Final">Final</option>
+                                <option value="League">League</option>
+                            </select>
                     </div>
                     <div>
                         <h6>Thumbnail(Optional) : </h6>

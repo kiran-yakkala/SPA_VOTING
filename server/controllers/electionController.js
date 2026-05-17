@@ -25,7 +25,7 @@ const addElection = async (req, res, next) => {
             return next(new HttpError("Only an admin can perform this action.", 403))
         }
         console.log("in adding election body...", req.body)
-        const {title, description, matchdate, matchtimeslot, teams} = req.body;
+        const {title, description, matchdate, matchtimeslot, teams, stage} = req.body;
         if(!title || !description || !matchdate || !matchtimeslot) {
             
             return next(new HttpError("Fill in all fields.", 422))
@@ -80,7 +80,8 @@ const addElection = async (req, res, next) => {
                 description,
                 matchdate,
                 matchtimeslot,
-                thumbnail: result.secure_url
+                thumbnail: result.secure_url,
+                stage
             });
 
             // 2. Create Candidate entries for each selected Team
@@ -243,7 +244,7 @@ const updateElection = async (req, res, next) => {
         }
 
         const { id } = req.params;
-        const { title, description, winnerId, matchdate, matchtimeslot } = req.body;
+        const { title, description, winnerId, matchdate, matchtimeslot, stage } = req.body;
 
         const existingElection = await ElectionModel.findById(id);
         if (!existingElection) {
@@ -259,7 +260,7 @@ const updateElection = async (req, res, next) => {
             return next(new HttpError("Fill in all fields.", 422));
         }
 
-        let updateData = { title, description, matchdate, matchtimeslot };
+        let updateData = { title, description, matchdate, matchtimeslot, stage };
 
         // Handle Image Upload if provided
         if (req.files && req.files.thumbnail) {
@@ -603,9 +604,15 @@ const distributeMatchPoints = async (electionId, winnerId) => {
         const allVotes = await voteModel.find({ election: electionId });
         if (allVotes.length === 0) return;
 
-        const totalPool = allVotes.length * 50;
+        let share = 50; 
+        if (election.stage === 'Eliminator' || election.stage === 'Qualifier') {
+            share = 100; // Set eliminator points
+        } else if (election.stage === 'Final') {
+            share = 200; // Set final points
+        }
+
+        const totalPool = allVotes.length * share;
         let winners = [];
-        let share = 50;
         let netEarnings = 0;
         let message = "";
 
@@ -613,7 +620,7 @@ const distributeMatchPoints = async (electionId, winnerId) => {
             // Split equally (Refund 50 points each)
             winners = allVotes.map(v => v.voter);
             netEarnings = share;
-            message = `Match: ${matchName} (${matchDate}) ended in No Result. 50 points have been refunded.`;
+            message = `Match: ${matchName} (${matchDate}) ended in No Result. ${share} points have been refunded.`;
             await voterModel.updateMany(
                 { _id: { $in: winners } },
                 { 
@@ -640,11 +647,11 @@ const distributeMatchPoints = async (electionId, winnerId) => {
                 const totalShare = Math.floor(totalPool / winners.length);
                 
                 // 3. Subtract the initial 50 points stake to get net earnings
-                
+                console.log("totalShare:", totalShare);
                 netEarnings = totalShare - share; 
 
                 // 4. Enhanced message for Winners
-                message = `Congrats! You picked the winner ${winnerTeamName} for ${matchName} (${matchDate}). Earned: ${netEarnings} pts (Total Share: ${share} pts).`;
+                message = `Congrats! You picked the winner ${winnerTeamName} for ${matchName} (${matchDate}). Earned: ${netEarnings} pts (Total Share: ${totalShare} pts).`;
 
                 await voterModel.updateMany(
                     { _id: { $in: winners } },
@@ -667,9 +674,9 @@ const distributeMatchPoints = async (electionId, winnerId) => {
                     //  Enhanced message for Losers
                     message = `Your did not pick the winner ${winnerTeamName} for ${matchName} (${matchDate}) and lost. Your profit has decreased by 0 pts.`;
                 } else {
-                    netEarnings = -50; 
+                    netEarnings = -share; 
                     //  Enhanced message for Losers
-                    message = `Your did not pick the winner ${winnerTeamName} for ${matchName} (${matchDate}) and lost. Your profit has decreased by 50 pts.`;
+                    message = `Your did not pick the winner ${winnerTeamName} for ${matchName} (${matchDate}) and lost. Your profit has decreased by ${share} pts.`;
                 }         
                
 
@@ -791,7 +798,22 @@ const syncHistoricalVoterPoints = async (req, res, next) => {
     }
 };
 
+const updateExistingElections = async () => {
+    try {
+        // Update all elections that do not have a stage field yet
+        const result = await electionModel.updateMany(
+            { stage: { $exists: false } },
+            { $set: { stage: 'League' } }
+        );
+
+        console.log(`Successfully updated ${result.modifiedCount} old elections to default stage 'League'.`);
+        res.status(200).json({ message: "Successfully updated existing elections with default stage." });
+    } catch (error) {
+        console.error("Error updating existing elections:", error);
+    }
+};
+
 
 module.exports = {getElection, getElections, addElection, updateElection, 
     removeElection, getElectionCandidates, getElectionVoters, getElectionsForIds,
-    getElectionCandidatesWithVotes, closeElection, migrateData, syncHistoricalData, syncHistoricalVoterPoints}
+    getElectionCandidatesWithVotes, closeElection, migrateData, syncHistoricalData, syncHistoricalVoterPoints, updateExistingElections}

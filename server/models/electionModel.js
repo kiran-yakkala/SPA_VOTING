@@ -12,7 +12,8 @@ const electionSchema = new Schema({
     voters: [{type: Types.ObjectId, ref:"Voter", required: true}],
     winner: {type: Types.ObjectId, ref: "Candidate", default: null},
     noresult: {type: Boolean, default: false},
-    isClosed: {type: Boolean, default: false} 
+    isClosed: {type: Boolean, default: false},
+    stage: {type: String, enum: ['League', 'Eliminator', 'Qualifier', 'Final'], default: 'League'},
 }, {timestamps: true})
 
 
