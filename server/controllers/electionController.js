@@ -605,8 +605,10 @@ const distributeMatchPoints = async (electionId, winnerId) => {
         if (allVotes.length === 0) return;
 
         let share = 50; 
-        if (election.stage === 'Eliminator' || election.stage === 'Qualifier') {
+        if (election.stage === 'Eliminator') {
             share = 100; // Set eliminator points
+        } else if (election.stage === 'Qualifier') {
+            share = 150;
         } else if (election.stage === 'Final') {
             share = 200; // Set final points
         }
