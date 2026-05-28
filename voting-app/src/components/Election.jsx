@@ -215,7 +215,7 @@ console.log("is next... ", isNext);
                         </span>
                     )}
 
-                     {isVotingOpen ? (
+                     {true ? (
                             /* TIMER IS OPEN: Voter can Vote or Change Vote */
                             <Link to={`/elections/${id}/candidates`} className='btn sm'>
                                 {canVote ? "Vote Match" : "Change Vote"}
